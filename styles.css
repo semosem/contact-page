@@ -68,7 +68,7 @@ h1 {
 }
 #slider-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 20rem;
   left: 50%;
   transform: translateX(-50%);
   width: 80%;
