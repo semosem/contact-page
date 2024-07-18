@@ -3,7 +3,6 @@ const resumeContent = [
   "In-depth understanding of ReactJS, VueJS, NodeJS, and Angular. I speak their languages fluently!",
   "Strong grasp of Component-based UIs, HTML DOM tree, render tree, and critical rendering path. I see the Matrix!",
   "Team player with versatile skill set for diverse software engineering projects. I'm the Swiss Army knife of coding!",
-  "My code is so clean, it makes Marie Kondo look like a hoarder. It sparks joy in every code review!",
   "I don't debug code, I negotiate with it until it works. Bugs fear me like Neo fears Agent Smith!",
   "My Git commits are so atomic, they're studied by quantum physicists. Schrödinger's cat approves!",
   "I can code faster than a caffeinated cheetah on a rocket-powered skateboard in the Matrix!",
@@ -134,6 +133,8 @@ function drawMatrixRain() {
 setInterval(drawMatrixRain, 33);
 
 function toggleCvDropdown() {
+  console.log("cv icon clicked", cvDropdown.classList.toggle("active"));
+
   if (cvDropdown.style.display === "none" || cvDropdown.style.display === "") {
     cvDropdown.style.display = "block";
     const listItems = cvDropdown.querySelectorAll("li");
@@ -199,19 +200,6 @@ pulseCVIcon();
 updateContent();
 
 ////////////////////////////////////////
-
-function enhanceMatrixRain() {
-  const brightChars = "01";
-  for (let i = 0; i < drops.length; i++) {
-    if (Math.random() > 0.98) {
-      ctx.fillStyle = "#fff";
-      const brightChar = brightChars.charAt(
-        Math.floor(Math.random() * brightChars.length)
-      );
-      ctx.fillText(brightChar, i * fontSize, drops[i] * fontSize);
-    }
-  }
-}
 
 function glitchEffect() {
   const title = document.querySelector("h1");
