@@ -1,13 +1,13 @@
 const resumeContent = [
-  "8+ years of proven experience in building TypeScript and JavaScript web services and web development.",
-  "In-depth understanding of ReactJS, VueJS, NodeJS, and Angular. I speak their languages fluently!",
-  "Strong grasp of Component-based UIs, HTML DOM tree, render tree, and critical rendering path. I see the Matrix!",
-  "Team player with versatile skill set for diverse software engineering projects. I'm the Swiss Army knife of coding!",
-  "I don't debug code, I negotiate with it until it works. Bugs fear me like Neo fears Agent Smith!",
-  "My Git commits are so atomic, they're studied by quantum physicists. Schrödinger's cat approves!",
-  "I can code faster than a caffeinated cheetah on a rocket-powered skateboard in the Matrix!",
-  "My debugging skills are so good, I can find bugs in code I haven't even written yet. I see dead code!",
-  "My code runs so fast, it finished executing yesterday and already has 5-star reviews from the future!",
+  "Team player with versatile skill set for diverse software engineering projects, quick at adapting to new challenges and technologies.",
+  "In-depth understanding of ReactJS, VueJS, NodeJS, and Angular, with a track record of developing robust applications in each.",
+  "My Git commits are precise and well-documented, ensuring easy collaboration and maintenance.",
+  "Proficient in debugging, able to identify and resolve complex issues quickly and effectively.",
+  "Strong grasp of Component-based UIs, HTML DOM tree, render tree, and critical rendering path, ensuring optimal performance and user experience.",
+  "8+ years of proven experience in building TypeScript and JavaScript web services and web development. Successfully led projects that improved system efficiency by 30%.",
+  "Fast and efficient coding skills, consistently delivering high-quality work ahead of deadlines.",
+  "Expert at identifying and fixing bugs, with a proactive approach to problem-solving.",
+  "My code is optimized for performance, resulting in fast and reliable applications.",
 ];
 
 const gifs = [
@@ -77,7 +77,7 @@ function updateGifs(value) {
     gif.className = "gif";
     gif.style.left = `${Math.random() * 90}%`;
     gif.style.top = `${Math.random() * 90}%`;
-    gif.style.width = `${50 + Math.random() * 100}px`;
+    gif.style.width = `${250 + Math.random() * 100}px`;
     gif.style.height = "auto";
     gif.style.opacity = Math.min(1, value / 50);
     gifContainer.appendChild(gif);
