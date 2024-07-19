@@ -28,6 +28,8 @@ const backgroundElement = document.getElementById("background");
 const gifContainer = document.getElementById("gif-container");
 const cvIcon = document.getElementById("cv-icon");
 const cvDropdown = document.getElementById("cv-dropdown");
+const terminalInput = document.getElementById("terminal-input");
+const terminalOutput = document.getElementById("terminal-output");
 
 function updateContent() {
   const value = parseInt(slider.value);
@@ -285,3 +287,51 @@ function activateEasterEgg() {
 cvIcon.addEventListener("click", toggleCvDropdown);
 
 updateContent();
+
+/////////////////////////////////////////////////
+
+// Terminal functionality
+terminalInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const command = terminalInput.value.trim().toLowerCase();
+    terminalOutput.innerHTML += `<div><span class="prompt">$</span> ${command}</div>`;
+
+    switch (command) {
+      case "help":
+        terminalOutput.innerHTML +=
+          "<div>Available commands: help, skills, projects, contact, clear</div>";
+        break;
+      case "skills":
+        terminalOutput.innerHTML +=
+          "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs</div>";
+        break;
+      case "projects":
+        terminalOutput.innerHTML +=
+          "<div>Projects: [Project details coming soon]</div>";
+        break;
+      case "contact":
+        terminalOutput.innerHTML += "<div>Contact: dwell.sem@gmail.com</div>";
+        break;
+      case "clear":
+        terminalOutput.innerHTML = "";
+        break;
+      default:
+        terminalOutput.innerHTML +=
+          "<div>Command not recognized. Type 'help' for available commands.</div>";
+    }
+
+    terminalInput.value = "";
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  }
+});
+
+// Skill pills interactivity
+const skillPills = document.querySelectorAll(".skill-pill");
+skillPills.forEach((pill) => {
+  pill.addEventListener("click", () => {
+    const skill = pill.textContent;
+    terminalOutput.innerHTML += `<div><span class="prompt">$</span> skill ${skill}</div>`;
+    terminalOutput.innerHTML += `<div>Skill selected: ${skill}</div>`;
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  });
+});
