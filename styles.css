@@ -108,6 +108,13 @@ h1 {
   border-radius: 50%;
   transition: all 0.2s;
 }
+
+#keyboard-hint {
+  margin-top: 20px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
 @keyframes glow {
   0% {
     text-shadow: 0 0 5px #0f0;
