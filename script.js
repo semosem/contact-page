@@ -303,7 +303,7 @@ terminalInput.addEventListener("keydown", (e) => {
         break;
       case "skills":
         terminalOutput.innerHTML +=
-          "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs</div>";
+          "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs, GraphQl</div>";
         break;
       case "projects":
         terminalOutput.innerHTML +=
