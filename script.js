@@ -1,3 +1,77 @@
+const soundButton = document.getElementById("soundButton");
+const birdSlider = document.getElementById("slider");
+let isPlaying = false;
+let currentSoundType = 0;
+
+const audio = new Audio("./mixkit-double-little-bird-chirp-21.wav");
+audio.loop = true;
+let audioElements = [audio];
+
+function playNatureSound() {
+  stopAllSounds();
+  console.log({ a: audioElements[0] });
+
+  audioElements[0].play().catch((e) => {
+    console.error("Error playing audio:", e);
+    alert(
+      "There was an error playing the audio. Please check your browser settings or try again."
+    );
+  });
+}
+
+function stopAllSounds() {
+  audioElements.forEach((audio) => audio.pause());
+}
+
+function toggleSound() {
+  if (isPlaying) {
+    stopAllSounds();
+    soundButton.textContent = "🐦🌿";
+    isPlaying = false;
+  } else {
+    playNatureSound();
+    soundButton.textContent = "🔇";
+    isPlaying = true;
+  }
+}
+
+soundButton.addEventListener("click", toggleSound);
+
+birdSlider.addEventListener("input", () => {
+  currentSoundType = parseInt(birdSlider.value);
+  if (isPlaying) {
+    stopAllSounds();
+    playNatureSound();
+  }
+});
+
+// Preload audio files
+window.addEventListener("load", () => {
+  audioElements.forEach((audio) => {
+    audio.load();
+  });
+});
+
+// Add this to check if audio can be played
+document.body.addEventListener(
+  "click",
+  function () {
+    let audio = new Audio();
+    audio
+      .play()
+      .then(() => {
+        console.log("Audio playback is allowed");
+      })
+      .catch((e) => {
+        console.warn("Audio playback might be restricted:", e);
+        alert(
+          "Audio playback might be restricted in your browser. Please check your settings or try interacting with the page first."
+        );
+      });
+  },
+  { once: true }
+);
+
 const resumeContent = [
   "Extensive expertise in diverse, team-oriented software engineering projects",
   "In-depth understanding of ReactJS, VueJS, NodeJS, and Angular, with a track record of developing robust applications in each.",

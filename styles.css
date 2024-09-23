@@ -201,6 +201,66 @@ h1 {
   align-items: center;
 }
 
+.control-container {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+#soundButton {
+  background-color: transparent;
+  border: 4px solid #00ff00;
+  color: #00ff00;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+#soundButton:hover {
+  background-color: rgba(0, 255, 0, 0.2);
+}
+.glow {
+  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00,
+    0 0 20px #00ff00;
+}
+#birdSlider {
+  width: 160px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;
+  background: #00ff00;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+#birdSlider:hover {
+  opacity: 1;
+}
+#birdSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #00ff00;
+  cursor: pointer;
+  border-radius: 50%;
+}
+#birdSlider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #00ff00;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
 @keyframes glow {
   0% {
     text-shadow: 0 0 5px #0f0;
@@ -215,6 +275,7 @@ h1 {
 .glow {
   animation: glow 2s infinite;
 }
+
 @keyframes shake {
   0% {
     transform: translate(1px, 1px) rotate(0deg);
