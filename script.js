@@ -399,12 +399,7 @@ terminalInput.addEventListener("keydown", (e) => {
           "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs, GraphQl</div>";
         break;
       case "projects":
-        terminalOutput.innerHTML += (
-          <div>
-            Projects: [ Project details coming soon but checkout my github,
-            https://github.com/semosem?tab=repositories]
-          </div>
-        );
+        terminalOutput.innerHTML += "";
         break;
       case "contact":
         terminalOutput.innerHTML += "<div>Contact: dwell.sem@gmail.com</div>";
