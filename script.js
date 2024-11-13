@@ -1,5 +1,8 @@
 const soundButton = document.getElementById("soundButton");
 const birdSlider = document.getElementById("slider");
+const terminal = document.getElementById("terminal");
+const birdContainer = document.getElementById("birdContainer");
+
 let isPlaying = false;
 let currentSoundType = 0;
 
@@ -7,7 +10,26 @@ const audio = new Audio("./mixkit-double-little-bird-chirp-21.wav");
 audio.loop = true;
 let audioElements = [audio];
 
-function playNatureSound() {
+const birdSounds = [
+  "Tweet! Tweet!",
+  "Chirp chirp!",
+  "Caw caw!",
+  "Hoot hoot!",
+  "Squawk!",
+  "Warble warble!",
+  "Peep peep!",
+];
+
+function addToTerminal(text) {
+  const line = document.createElement("div");
+  line.textContent = `$ ${text}`;
+  terminal.appendChild(line);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+// Initial terminal message
+
+function playBirdSound() {
   stopAllSounds();
   console.log({ a: audioElements[0] });
 
@@ -29,7 +51,7 @@ function toggleSound() {
     soundButton.textContent = "🐦🌿";
     isPlaying = false;
   } else {
-    playNatureSound();
+    playBirdSound();
     soundButton.textContent = "🔇";
     isPlaying = true;
   }
@@ -41,7 +63,7 @@ birdSlider.addEventListener("input", () => {
   currentSoundType = parseInt(birdSlider.value);
   if (isPlaying) {
     stopAllSounds();
-    playNatureSound();
+    playBirdSound();
   }
 });
 
@@ -52,25 +74,22 @@ window.addEventListener("load", () => {
   });
 });
 
-// Add this to check if audio can be played
-document.body.addEventListener(
-  "click",
-  function () {
-    let audio = new Audio();
-    audio
-      .play()
-      .then(() => {
-        console.log("Audio playback is allowed");
-      })
-      .catch((e) => {
-        console.warn("Audio playback might be restricted:", e);
-        alert(
-          "Audio playback might be restricted in your browser. Please check your settings or try interacting with the page first."
-        );
-      });
-  },
-  { once: true }
-);
+function checkSound() {
+  let audio = new Audio();
+  audio
+    .play()
+    .then(() => {
+      console.log("Audio playback is allowed");
+    })
+    .catch((e) => {
+      console.warn("Audio playback might be restricted:", e);
+      alert(
+        "Audio playback might be restricted in your browser. Please check your settings or try interacting with the page first."
+      );
+    });
+}
+
+document.body.addEventListener("click", checkSound, { once: true });
 
 const resumeContent = [
   "Extensive expertise in diverse, team-oriented software engineering projects",
@@ -380,8 +399,12 @@ terminalInput.addEventListener("keydown", (e) => {
           "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs, GraphQl</div>";
         break;
       case "projects":
-        terminalOutput.innerHTML +=
-          "<div>Projects: [Project details coming soon]</div>";
+        terminalOutput.innerHTML += (
+          <div>
+            Projects: [ Project details coming soon but checkout my github,
+            https://github.com/semosem?tab=repositories]
+          </div>
+        );
         break;
       case "contact":
         terminalOutput.innerHTML += "<div>Contact: dwell.sem@gmail.com</div>";
