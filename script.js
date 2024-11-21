@@ -399,7 +399,7 @@ terminalInput.addEventListener("keydown", (e) => {
           "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs, GraphQl</div>";
         break;
       case "projects":
-        terminalOutput.innerHTML += "";
+        terminalOutput.innerHTML += "https://github.com/semosem";
         break;
       case "contact":
         terminalOutput.innerHTML += "<div>Contact: dwell.sem@gmail.com</div>";
@@ -422,7 +422,8 @@ const skillPills = document.querySelectorAll(".skill-pill");
 skillPills.forEach((pill) => {
   pill.addEventListener("click", () => {
     const skill = pill.textContent;
-    terminalOutput.innerHTML += `<div><span class="prompt">$</span> [INFO] Analyzing Skill: ${skill}</div>`;
+    terminalOutput.innerHTML += `<div><span class="prompt">$</span> 
+    [INFO] Analyzing Skill: ${skill}</div>`;
     terminalOutput.innerHTML += `<div>
     <p>============================</p>
 Experience Level: Strong</div>`;
