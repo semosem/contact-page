@@ -422,8 +422,10 @@ const skillPills = document.querySelectorAll(".skill-pill");
 skillPills.forEach((pill) => {
   pill.addEventListener("click", () => {
     const skill = pill.textContent;
-    terminalOutput.innerHTML += `<div><span class="prompt">$</span> skill ${skill}</div>`;
-    terminalOutput.innerHTML += `<div>Skill selected: ${skill}</div>`;
+    terminalOutput.innerHTML += `<div><span class="prompt">$</span> [INFO] Analyzing Skill: ${skill}</div>`;
+    terminalOutput.innerHTML += `<div>
+    <p>============================</p>
+Experience Level: Strong</div>`;
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
   });
 });
