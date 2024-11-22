@@ -392,11 +392,15 @@ terminalInput.addEventListener("keydown", (e) => {
     switch (command) {
       case "help":
         terminalOutput.innerHTML +=
-          "<div>Available commands: help, skills, projects, contact, clear</div>";
+          "<div>Available commands: help, skills, quote, projects, contact, clear</div>";
         break;
       case "skills":
         terminalOutput.innerHTML +=
           "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs, GraphQl</div>";
+        break;
+      case "quote":
+        terminalOutput.innerHTML +=
+          "<div>The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela</div>";
         break;
       case "projects":
         terminalOutput.innerHTML += "https://github.com/semosem";
