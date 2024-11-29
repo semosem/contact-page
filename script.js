@@ -317,12 +317,6 @@ function glitchEffect() {
 
 setInterval(glitchEffect, 3000);
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "c" || e.key === "C") {
-    toggleCvDropdown();
-  }
-});
-
 let konamiCode = [
   "ArrowUp",
   "ArrowUp",
