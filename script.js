@@ -227,8 +227,6 @@ function drawMatrixRain() {
 setInterval(drawMatrixRain, 33);
 
 function toggleCvDropdown() {
-  console.log("cv icon clicked", cvDropdown.classList.toggle("active"));
-
   if (cvDropdown.style.display === "none" || cvDropdown.style.display === "") {
     cvDropdown.style.display = "block";
     const listItems = cvDropdown.querySelectorAll("li");
@@ -316,6 +314,12 @@ function glitchEffect() {
 }
 
 setInterval(glitchEffect, 3000);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "c" || e.key === "C") {
+    toggleCvDropdown();
+  }
+});
 
 let konamiCode = [
   "ArrowUp",
