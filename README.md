@@ -20,9 +20,10 @@ Then visit `http://localhost:8000`.
 - `js/ui.js` – UI logic (slider, terminal, CV, sound)
 - `js/matrix.js` – matrix rain + glitch
 - `js/data.js` – shared constants
-- `mixkit-double-little-bird-chirp-21.wav` – ambient sound
 
 ## Notes
 
 - The slider intentionally escalates visual intensity toward the right end.
-- At the max value, the main text intentionally becomes `undefined`.
+- At the max value, the main text becomes `CALL NOW!` and flashes.
+- Ambient audio is a synthetic "matrix hum" toggled by the sound button.
+- The slider HUD shows signal percentage and mode.

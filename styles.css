@@ -63,12 +63,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 255, 106, 0.18) 0%,
-    rgba(0, 0, 0, 0.9) 70%
-  );
-  opacity: 0.6;
+  background: transparent;
+  opacity: 0;
   z-index: 0;
   transition: all 0.5s ease;
 }
@@ -181,6 +177,33 @@ h1 {
   max-width: 640px;
   z-index: 2;
   isolation: isolate;
+}
+
+#slider-hud {
+  --hud-color: #00ff6a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #eafff2;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.85),
+    0 0 18px rgba(0, 255, 106, 0.6);
+  pointer-events: none;
+}
+
+#slider-hud .hud-line {
+  display: inline-flex;
+  gap: 6px;
+}
+
+#slider-hud .hud-line strong,
+#slider-hud .hud-value {
+  color: var(--hud-color);
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.95),
+    0 0 22px rgba(0, 255, 106, 0.75);
 }
 
 #slider-container::before {
@@ -314,7 +337,7 @@ h1 {
   left: 20px;
   width: 400px;
   height: 250px;
-  background: linear-gradient(180deg, rgba(0, 30, 10, 0.85), rgba(0, 0, 0, 0.95));
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 10px;
@@ -380,7 +403,7 @@ h1 {
 
 #soundButton {
   background: radial-gradient(circle, rgba(0, 255, 106, 0.15), rgba(0, 0, 0, 0.8));
-  border: 1px solid var(--matrix-green);
+  border: 2px solid rgba(0, 255, 140, 0.95);
   color: var(--matrix-green);
   width: 150px;
   height: 150px;
@@ -391,18 +414,33 @@ h1 {
   align-items: center;
   font-size: 58px;
   transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(0, 255, 106, 0.4);
+  box-shadow: 0 0 12px rgba(0, 255, 106, 0.6),
+    0 0 30px rgba(0, 255, 140, 0.8),
+    inset 0 0 18px rgba(0, 255, 140, 0.35);
   margin-bottom: 20px;
 }
 
 #soundButton:hover {
-  background: rgba(0, 255, 106, 0.2);
-  box-shadow: 0 0 30px rgba(0, 255, 106, 0.7);
+  background: rgba(0, 255, 106, 0.25);
+  box-shadow: 0 0 16px rgba(0, 255, 140, 0.85),
+    0 0 40px rgba(0, 255, 140, 0.95),
+    inset 0 0 22px rgba(0, 255, 140, 0.45);
 }
 
 #soundButton:focus-visible {
   outline: 2px solid var(--matrix-bright);
   outline-offset: 4px;
+}
+
+#soundButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: 0 0 10px rgba(0, 255, 106, 0.25);
+}
+
+#soundButton:disabled:hover {
+  background: radial-gradient(circle, rgba(0, 255, 106, 0.12), rgba(0, 0, 0, 0.8));
+  box-shadow: 0 0 12px rgba(0, 255, 106, 0.25);
 }
 
 .glow {
@@ -562,6 +600,8 @@ h1 {
     callZoom 0.5s ease-in-out infinite;
   text-transform: uppercase;
   letter-spacing: 2px;
+  display: inline-block;
+  transform-origin: center;
 }
 
 @keyframes callFlash {
@@ -588,14 +628,11 @@ h1 {
   0% {
     transform: scale(1);
   }
-  20% {
-    transform: scale(1.18);
+  35% {
+    transform: scale(2.2);
   }
-  40% {
-    transform: scale(0.96);
-  }
-  60% {
-    transform: scale(1.08);
+  55% {
+    transform: scale(2.2);
   }
   100% {
     transform: scale(1);
@@ -689,9 +726,19 @@ h1 {
   }
 }
 
+@media (max-width: 1536px), (max-height: 900px) {
+  #terminal {
+    border: none;
+    box-shadow: none;
+  }
+}
+
 @media (max-width: 900px), (max-height: 700px) {
   #terminal {
-    display: none;
+    width: 320px;
+    height: 140px;
+    border: none;
+    box-shadow: none;
   }
 
   #skills-container {

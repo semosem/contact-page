@@ -14,6 +14,9 @@ const dom = {
   terminalOutput: document.getElementById("terminal-output"),
   canvas: document.getElementById("matrix-rain"),
   title: document.querySelector("h1"),
+  sliderSignal: document.querySelector("[data-hud=\"signal\"]"),
+  sliderMode: document.querySelector("[data-hud=\"mode\"]"),
+  sliderHud: document.getElementById("slider-hud"),
 };
 
 const required = [

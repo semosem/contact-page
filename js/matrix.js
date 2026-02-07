@@ -10,6 +10,9 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     easedIntensity: 0,
     rainSpeed: 1,
     trailAlpha: 0.08,
+    brightness: 0.6,
+    shadowBlur: 0,
+    extraChance: 0,
   };
 
   let intervalId = null;
@@ -26,22 +29,44 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     state.drops = Array(columns).fill(1);
   };
 
-  const setIntensity = ({ easedIntensity, rainSpeed, trailAlpha }) => {
+  const setIntensity = ({
+    easedIntensity,
+    rainSpeed,
+    trailAlpha,
+    brightness,
+    shadowBlur,
+    extraChance,
+  }) => {
     state.easedIntensity = easedIntensity;
     state.rainSpeed = rainSpeed;
     state.trailAlpha = trailAlpha;
+    if (typeof brightness === "number") state.brightness = brightness;
+    if (typeof shadowBlur === "number") state.shadowBlur = shadowBlur;
+    if (typeof extraChance === "number") state.extraChance = extraChance;
   };
 
   const draw = () => {
     ctx.fillStyle = `rgba(0, 0, 0, ${state.trailAlpha})`;
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-    ctx.fillStyle = "#00ff6a";
+    ctx.fillStyle = `rgba(0, 255, 106, ${state.brightness})`;
     ctx.font = `${settings.matrixFontSize}px "Share Tech Mono", monospace`;
+    ctx.shadowColor = "rgba(0, 255, 106, 0.75)";
+    ctx.shadowBlur = state.shadowBlur;
 
     for (let i = 0; i < state.drops.length; i += 1) {
       const text = chars.charAt(Math.floor(Math.random() * chars.length));
       ctx.fillText(text, i * settings.matrixFontSize, state.drops[i] * settings.matrixFontSize);
+
+      if (state.extraChance > 0 && Math.random() < state.extraChance) {
+        const extraText = chars.charAt(Math.floor(Math.random() * chars.length));
+        const offset = Math.random() * settings.matrixFontSize * 6;
+        ctx.fillText(
+          extraText,
+          i * settings.matrixFontSize,
+          state.drops[i] * settings.matrixFontSize - offset
+        );
+      }
 
       if (
         state.drops[i] * settings.matrixFontSize > window.innerHeight &&
@@ -51,6 +76,8 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
       }
       state.drops[i] += state.rainSpeed;
     }
+
+    ctx.shadowBlur = 0;
   };
 
   const start = () => {

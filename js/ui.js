@@ -8,9 +8,6 @@ export const initUI = ({
   matrix,
 }) => {
   const rootStyle = document.documentElement.style;
-  const audio = new Audio("./mixkit-double-little-bird-chirp-21.wav");
-  audio.loop = true;
-
   const state = {
     isPlaying: false,
     intensity: 0,
@@ -22,35 +19,77 @@ export const initUI = ({
   const gifPool = [];
   const sliderMax = Number(dom.slider.max) || settings.sliderMax;
   const sliderStep = settings.sliderStep;
+  let audioContext = null;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
   const setSoundButtonState = (playing) => {
-    dom.soundButton.textContent = playing ? "🔇" : "🐦🌿";
+    dom.soundButton.textContent = playing ? "🔇" : "🔊";
     dom.soundButton.setAttribute("aria-pressed", String(playing));
     dom.soundButton.setAttribute(
       "aria-label",
-      playing ? "Mute ambient birds" : "Play ambient birds"
+      playing ? "Mute matrix hum" : "Play matrix hum"
     );
   };
 
-  const playBirdSound = () => {
-    audio.play().catch((error) => {
-      console.error("Error playing audio:", error);
-      alert(
-        "There was an error playing the audio. Please check your browser settings or try again."
-      );
-    });
+  const startMatrixHum = () => {
+    if (audioContext) return audioContext;
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    const master = audioContext.createGain();
+    master.gain.value = 0.05;
+
+    const oscLow = audioContext.createOscillator();
+    oscLow.type = "sawtooth";
+    oscLow.frequency.value = 42;
+
+    const oscHigh = audioContext.createOscillator();
+    oscHigh.type = "triangle";
+    oscHigh.frequency.value = 84;
+
+    const filter = audioContext.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.value = 620;
+    filter.Q.value = 0.7;
+
+    const lfo = audioContext.createOscillator();
+    lfo.type = "sine";
+    lfo.frequency.value = 0.2;
+
+    const lfoGain = audioContext.createGain();
+    lfoGain.gain.value = 220;
+
+    lfo.connect(lfoGain);
+    lfoGain.connect(filter.frequency);
+
+    oscLow.connect(filter);
+    oscHigh.connect(filter);
+    filter.connect(master);
+    master.connect(audioContext.destination);
+
+    oscLow.start();
+    oscHigh.start();
+    lfo.start();
+
+    return audioContext;
   };
 
   const toggleSound = () => {
-    state.isPlaying = !state.isPlaying;
-    if (state.isPlaying) {
-      playBirdSound();
+    const context = startMatrixHum();
+    if (!context) return;
+
+    if (context.state === "running") {
+      context.suspend().then(() => {
+        state.isPlaying = false;
+        setSoundButtonState(false);
+      });
     } else {
-      audio.pause();
+      context.resume().then(() => {
+        state.isPlaying = true;
+        setSoundButtonState(true);
+      });
     }
-    setSoundButtonState(state.isPlaying);
   };
 
   const setBodyShake = (enabled) => {
@@ -152,6 +191,18 @@ export const initUI = ({
       value > 75 ? "#ff4d4d" : value > 55 ? "#ffe066" : "#00ff6a";
     dom.slider.style.background = `linear-gradient(90deg, ${fillColor} 0%, ${fillColor} ${value}%, rgba(0, 255, 106, 0.45) ${value}%, rgba(0, 255, 106, 0.45) 100%)`;
 
+    if (dom.sliderSignal) {
+      dom.sliderSignal.textContent = `${Math.round(state.intensity * 100)}%`;
+    }
+    if (dom.sliderMode) {
+      const mode =
+        value > 75 ? "HARD" : value > 40 ? "FIRM" : "SOFT";
+      dom.sliderMode.textContent = mode;
+    }
+    if (dom.sliderHud) {
+      dom.sliderHud.style.setProperty("--hud-color", fillColor);
+    }
+
     rootStyle.setProperty(
       "--scanline-opacity",
       String(0.12 + state.easedIntensity * 0.28)
@@ -164,8 +215,11 @@ export const initUI = ({
     matrix.setOpacity(0.45 + state.easedIntensity * 0.45);
     matrix.setIntensity({
       easedIntensity: state.easedIntensity,
-      rainSpeed: 0.6 + state.easedIntensity * 2.2,
-      trailAlpha: clamp(0.14 - state.easedIntensity * 0.09, 0.04, 0.14),
+      rainSpeed: 0.6 + state.easedIntensity * 2.4,
+      trailAlpha: clamp(0.14 - state.easedIntensity * 0.1, 0.035, 0.14),
+      brightness: 0.35 + state.easedIntensity * 0.65,
+      shadowBlur: 2 + state.easedIntensity * 8,
+      extraChance: 0.05 + state.easedIntensity * 0.35,
     });
 
     state.glitchStrength = 0.08 + state.easedIntensity * 0.25;
@@ -362,6 +416,7 @@ export const initUI = ({
     bindSkillPills();
     updateContent();
 
+    dom.soundButton.title = "Toggle matrix hum";
     dom.soundButton.addEventListener("click", toggleSound);
     dom.slider.addEventListener("input", updateContent);
     dom.terminalInput.addEventListener("keydown", handleTerminalEnter);
@@ -395,4 +450,5 @@ export const initUI = ({
     init,
     getGlitchStrength: () => state.glitchStrength,
   };
+
 };
