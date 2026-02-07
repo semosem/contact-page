@@ -1,10 +1,21 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
     <title>Sem Gebresilassie | code, creativity, and beyond</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+    />
     <link rel="stylesheet" href="./styles.css" title="styles" />
   </head>
   <body>
+    <div id="scanlines"></div>
+    <div id="vignette"></div>
     <canvas id="matrix-rain"></canvas>
     <div id="background"></div>
     <div id="content">
@@ -16,7 +27,14 @@
     </div>
     <div id="gif-container"></div>
     <div id="slider-container">
-      <input type="range" min="0" max="100" value="0" id="slider" />
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        id="slider"
+        aria-label="Intensity"
+      />
       <div class="sale-indicator">
         <p>Soft sale</p>
         <p>Hard sale</p>
@@ -57,7 +75,7 @@
 
     <div id="terminal">
       <div id="terminal-container">
-        <div id="terminal-output"></div>
+        <div id="terminal-output" aria-live="polite"></div>
         <div id="terminal-input-line">
           <span class="prompt">$ </span>
           <input type="text" id="terminal-input" autofocus />
@@ -66,7 +84,9 @@
     </div>
 
     <div class="control-container">
-      <button id="soundButton">🐦🌿</button>
+      <button id="soundButton" type="button" aria-pressed="false">
+        🐦🌿
+      </button>
     </div>
 
     <script src="./script.js"></script>

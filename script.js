@@ -1,100 +1,23 @@
 const soundButton = document.getElementById("soundButton");
-const birdSlider = document.getElementById("slider");
-const terminal = document.getElementById("terminal");
-const birdContainer = document.getElementById("birdContainer");
+const slider = document.getElementById("slider");
+const resumeElement = document.getElementById("resume");
+const backgroundElement = document.getElementById("background");
+const gifContainer = document.getElementById("gif-container");
+const cvIcon = document.getElementById("cv-icon");
+const cvDropdown = document.getElementById("cv-dropdown");
+const terminalInput = document.getElementById("terminal-input");
+const terminalOutput = document.getElementById("terminal-output");
+const titleElement = document.querySelector("h1");
 
 let isPlaying = false;
-let currentSoundType = 0;
 
 const audio = new Audio("./mixkit-double-little-bird-chirp-21.wav");
 audio.loop = true;
-let audioElements = [audio];
-
-const birdSounds = [
-  "Tweet! Tweet!",
-  "Chirp chirp!",
-  "Caw caw!",
-  "Hoot hoot!",
-  "Squawk!",
-  "Warble warble!",
-  "Peep peep!",
-];
-
-function addToTerminal(text) {
-  const line = document.createElement("div");
-  line.textContent = `$ ${text}`;
-  terminal.appendChild(line);
-  terminal.scrollTop = terminal.scrollHeight;
-}
-
-// Initial terminal message
-
-function playBirdSound() {
-  stopAllSounds();
-  console.log({ a: audioElements[0] });
-
-  audioElements[0].play().catch((e) => {
-    console.error("Error playing audio:", e);
-    alert(
-      "There was an error playing the audio. Please check your browser settings or try again."
-    );
-  });
-}
-
-function stopAllSounds() {
-  audioElements.forEach((audio) => audio.pause());
-}
-
-function toggleSound() {
-  if (isPlaying) {
-    stopAllSounds();
-    soundButton.textContent = "🐦🌿";
-    isPlaying = false;
-  } else {
-    playBirdSound();
-    soundButton.textContent = "🔇";
-    isPlaying = true;
-  }
-}
-
-soundButton.addEventListener("click", toggleSound);
-
-birdSlider.addEventListener("input", () => {
-  currentSoundType = parseInt(birdSlider.value);
-  if (isPlaying) {
-    stopAllSounds();
-    playBirdSound();
-  }
-});
-
-// Preload audio files
-window.addEventListener("load", () => {
-  audioElements.forEach((audio) => {
-    audio.load();
-  });
-});
-
-function checkSound() {
-  let audio = new Audio();
-  audio
-    .play()
-    .then(() => {
-      console.log("Audio playback is allowed");
-    })
-    .catch((e) => {
-      console.warn("Audio playback might be restricted:", e);
-      alert(
-        "Audio playback might be restricted in your browser. Please check your settings or try interacting with the page first."
-      );
-    });
-}
-
-document.body.addEventListener("click", checkSound, { once: true });
 
 const resumeContent = [
   "Extensive expertise in diverse, team-oriented software engineering projects",
   "In-depth understanding of ReactJS, VueJS, NodeJS, and Angular, with a track record of developing robust applications in each.",
-  "Complemeted for my git commits to be precise and well-documented, ensuring easy collaboration and maintenance.",
+  "Complimented for my git commits being precise and well-documented, ensuring easy collaboration and maintenance.",
   "Expert at identifying and fixing bugs, with a proactive approach to problem-solving.",
   "Strong grasp of Component-based UIs, HTML DOM tree, render tree, and critical rendering path, ensuring optimal performance and user experience.",
   "8+ years of proven experience in building TypeScript and JavaScript web services and web development. Successfully led projects that improved system efficiency by 30%.",
@@ -115,54 +38,95 @@ const gifs = [
   "https://media.giphy.com/media/3o7qE1YN7aBOFPRw8E/giphy.gif",
 ];
 
-const slider = document.getElementById("slider");
-const resumeElement = document.getElementById("resume");
-const backgroundElement = document.getElementById("background");
-const gifContainer = document.getElementById("gif-container");
-const cvIcon = document.getElementById("cv-icon");
-const cvDropdown = document.getElementById("cv-dropdown");
-const terminalInput = document.getElementById("terminal-input");
-const terminalOutput = document.getElementById("terminal-output");
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+function clampIndex(value, length) {
+  return Math.max(0, Math.min(length - 1, value));
+}
+
+function setSoundButtonState(playing) {
+  soundButton.textContent = playing ? "🔇" : "🐦🌿";
+  soundButton.setAttribute("aria-pressed", String(playing));
+  soundButton.setAttribute(
+    "aria-label",
+    playing ? "Mute ambient birds" : "Play ambient birds"
+  );
+}
+
+function playBirdSound() {
+  audio.play().catch((e) => {
+    console.error("Error playing audio:", e);
+    alert(
+      "There was an error playing the audio. Please check your browser settings or try again."
+    );
+  });
+}
+
+function stopSound() {
+  audio.pause();
+}
+
+function toggleSound() {
+  if (isPlaying) {
+    stopSound();
+    isPlaying = false;
+  } else {
+    playBirdSound();
+    isPlaying = true;
+  }
+  setSoundButtonState(isPlaying);
+}
+
+soundButton.addEventListener("click", toggleSound);
+setSoundButtonState(isPlaying);
 
 function updateContent() {
-  const value = parseInt(slider.value);
-  const index = Math.floor(value / 10);
+  const value = parseInt(slider.value, 10);
+  const index = clampIndex(
+    Math.floor(value / (100 / resumeContent.length)),
+    resumeContent.length
+  );
 
-  resumeElement.innerHTML = resumeContent[index];
+  resumeElement.textContent = resumeContent[index];
 
-  const hue = 120 + (value / 100) * 60;
-  document.querySelector("h1").style.textShadow = `0 0 ${value / 2}px #0f0`;
-  backgroundElement.style.opacity = 0.3 + (value / 100) * 0.4;
-  backgroundElement.style.background = `radial-gradient(ellipse at center, hsl(${hue}, 100%, 50%) 0%, #000 70%)`;
+  const hue = 115 + (value / 100) * 50;
+  if (titleElement) {
+    titleElement.style.textShadow = `0 0 ${value / 2}px #0f0`;
+  }
+  backgroundElement.style.opacity = 0.35 + (value / 100) * 0.4;
+  backgroundElement.style.background = `radial-gradient(ellipse at center, hsl(${hue}, 100%, 45%) 0%, #000 70%)`;
 
   if (value > 50) {
     document.body.classList.add("shake");
     resumeElement.classList.add("rotate");
-    slider.style.background = "linear-gradient(90deg, #0f0, #ff0, #f00)";
+    slider.style.background = "linear-gradient(90deg, #00ff6a, #ff0, #f00)";
   } else {
     document.body.classList.remove("shake");
     resumeElement.classList.remove("rotate");
-    slider.style.background = "#0f0";
+    slider.style.background = "linear-gradient(90deg, #00ff6a, #00ffa8)";
   }
 
   updateGifs(value);
 
   if (value === 100) {
-    document.body.style.animation = "shake 0.1s infinite";
+    document.body.style.animation = prefersReducedMotion
+      ? ""
+      : "shake 0.1s infinite";
     resumeElement.style.fontSize = "2em";
-    resumeElement.style.color = "red";
+    resumeElement.style.color = "#ff4d4d";
     resumeElement.style.textShadow = "0 0 10px #fff";
   } else {
     document.body.style.animation = "";
-    resumeElement.style.fontSize = "1.5em";
-    resumeElement.style.color = "#0f0";
-    resumeElement.style.textShadow = "none";
+    resumeElement.style.fontSize = "";
+    resumeElement.style.color = "";
+    resumeElement.style.textShadow = "";
   }
 }
 
 function updateGifs(value) {
   const numGifs = Math.floor(value / 10);
-
   gifContainer.innerHTML = "";
 
   for (let i = 0; i < numGifs; i++) {
@@ -181,35 +145,56 @@ function updateGifs(value) {
 slider.addEventListener("input", updateContent);
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight") {
-    slider.value = Math.min(100, parseInt(slider.value) + 10);
-  } else if (e.key === "ArrowLeft") {
-    slider.value = Math.max(0, parseInt(slider.value) - 10);
+  const isTyping = document.activeElement === terminalInput;
+
+  if (!isTyping && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+    const delta = e.key === "ArrowRight" ? 10 : -10;
+    const next = Math.max(0, Math.min(100, parseInt(slider.value, 10) + delta));
+    slider.value = next;
+    updateContent();
   }
-  updateContent();
+
+  if (!isTyping && (e.key === "c" || e.key === "C")) {
+    toggleCvDropdown();
+  }
+
+  if (isTyping) return;
+
+  if (e.key === konamiCode[konamiIndex]) {
+    konamiIndex++;
+    if (konamiIndex === konamiCode.length) {
+      activateEasterEgg();
+      konamiIndex = 0;
+    }
+  } else {
+    konamiIndex = 0;
+  }
 });
 
 const canvas = document.getElementById("matrix-rain");
 const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
 const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const fontSize = 10;
-const columns = canvas.width / fontSize;
+const fontSize = 12;
+let drops = [];
 
-const drops = [];
-for (let i = 0; i < columns; i++) {
-  drops[i] = 1;
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = `${window.innerWidth}px`;
+  canvas.style.height = `${window.innerHeight}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const columns = Math.floor(window.innerWidth / fontSize);
+  drops = Array(columns).fill(1);
 }
 
 function drawMatrixRain() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+  ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-  ctx.fillStyle = "#0f0";
-  ctx.font = fontSize + "px monospace";
+  ctx.fillStyle = "#00ff6a";
+  ctx.font = `${fontSize}px \"Share Tech Mono\", monospace`;
 
   for (let i = 0; i < drops.length; i++) {
     const text = characters.charAt(
@@ -217,37 +202,45 @@ function drawMatrixRain() {
     );
     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+    if (drops[i] * fontSize > window.innerHeight && Math.random() > 0.975) {
       drops[i] = 0;
     }
     drops[i]++;
   }
 }
 
-setInterval(drawMatrixRain, 33);
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+drawMatrixRain();
+
+if (!prefersReducedMotion) {
+  setInterval(drawMatrixRain, 33);
+}
 
 function toggleCvDropdown() {
-  if (cvDropdown.style.display === "none" || cvDropdown.style.display === "") {
-    cvDropdown.style.display = "block";
+  const isOpen = cvDropdown.classList.contains("active");
+  cvDropdown.classList.toggle("active", !isOpen);
+  cvIcon.setAttribute("aria-expanded", String(!isOpen));
+
+  if (!isOpen) {
     const listItems = cvDropdown.querySelectorAll("li");
     listItems.forEach((item, index) => {
       setTimeout(() => animateMatrix(item), index * 500);
     });
-  } else {
-    cvDropdown.style.display = "none";
   }
 }
 
 cvIcon.addEventListener("click", toggleCvDropdown);
 
 function animateMatrix(element) {
-  const text = element.innerText;
+  const originalText = element.dataset.originalText || element.innerText;
+  element.dataset.originalText = originalText;
   element.innerText = "";
   let i = 0;
 
   function addChar() {
-    if (i < text.length) {
-      element.innerText += text.charAt(i);
+    if (i < originalText.length) {
+      element.innerText += originalText.charAt(i);
       i++;
       setTimeout(addChar, 50);
     }
@@ -258,18 +251,19 @@ function animateMatrix(element) {
 
 document.addEventListener("click", (event) => {
   if (!cvIcon.contains(event.target) && !cvDropdown.contains(event.target)) {
-    cvDropdown.style.display = "none";
+    cvDropdown.classList.remove("active");
+    cvIcon.setAttribute("aria-expanded", "false");
   }
 });
 
 cvIcon.addEventListener("mouseover", () => {
-  cvIcon.querySelector("svg").style.fill = "#00ff00";
+  cvIcon.querySelector("svg").style.fill = "#00ff6a";
   cvIcon.style.transform = "scale(1.1)";
   cvIcon.style.transition = "all 0.3s ease";
 });
 
 cvIcon.addEventListener("mouseout", () => {
-  cvIcon.querySelector("svg").style.fill = "#0f0";
+  cvIcon.querySelector("svg").style.fill = "#00ff6a";
   cvIcon.style.transform = "scale(1)";
 });
 
@@ -287,15 +281,14 @@ function pulseCVIcon() {
   );
 }
 
-pulseCVIcon();
-
-updateContent();
-
-////////////////////////////////////////
+if (!prefersReducedMotion) {
+  pulseCVIcon();
+}
 
 function glitchEffect() {
-  const title = document.querySelector("h1");
-  const glitchText = title.innerText;
+  if (!titleElement) return;
+
+  const glitchText = titleElement.innerText;
   let glitchedText = "";
 
   for (let i = 0; i < glitchText.length; i++) {
@@ -306,20 +299,16 @@ function glitchEffect() {
     }
   }
 
-  title.innerText = glitchedText;
+  titleElement.innerText = glitchedText;
 
   setTimeout(() => {
-    title.innerText = glitchText;
+    titleElement.innerText = glitchText;
   }, 100);
 }
 
-setInterval(glitchEffect, 3000);
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "c" || e.key === "C") {
-    toggleCvDropdown();
-  }
-});
+if (!prefersReducedMotion) {
+  setInterval(glitchEffect, 3000);
+}
 
 let konamiCode = [
   "ArrowUp",
@@ -335,18 +324,6 @@ let konamiCode = [
 ];
 let konamiIndex = 0;
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === konamiCode[konamiIndex]) {
-    konamiIndex++;
-    if (konamiIndex === konamiCode.length) {
-      activateEasterEgg();
-      konamiIndex = 0;
-    }
-  } else {
-    konamiIndex = 0;
-  }
-});
-
 function activateEasterEgg() {
   const easterEggText = "YOU'VE UNLOCKED THE MATRIX!";
   const easterEggElement = document.createElement("div");
@@ -355,8 +332,8 @@ function activateEasterEgg() {
   easterEggElement.style.left = "50%";
   easterEggElement.style.transform = "translate(-50%, -50%)";
   easterEggElement.style.fontSize = "3em";
-  easterEggElement.style.color = "#00ff00";
-  easterEggElement.style.textShadow = "0 0 10px #00ff00";
+  easterEggElement.style.color = "#00ff6a";
+  easterEggElement.style.textShadow = "0 0 10px #00ff6a";
   easterEggElement.style.zIndex = "9999";
 
   document.body.appendChild(easterEggElement);
@@ -375,60 +352,83 @@ function activateEasterEgg() {
   }, 100);
 }
 
-cvIcon.addEventListener("click", toggleCvDropdown);
+function appendTerminalLine(text, className, preformatted = false) {
+  const line = document.createElement("div");
+  if (className) line.className = className;
+  if (preformatted) line.style.whiteSpace = "pre-wrap";
+  line.textContent = text;
+  terminalOutput.appendChild(line);
+}
 
-updateContent();
+function appendPromptLine(text) {
+  const line = document.createElement("div");
+  const prompt = document.createElement("span");
+  prompt.className = "prompt";
+  prompt.textContent = "$";
+  line.appendChild(prompt);
+  line.append(` ${text}`);
+  terminalOutput.appendChild(line);
+}
 
-/////////////////////////////////////////////////
-
-// Terminal functionality
 terminalInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    const command = terminalInput.value.trim().toLowerCase();
-    terminalOutput.innerHTML += `<div><span class="prompt">$</span> ${command}</div>`;
+  if (e.key !== "Enter") return;
 
-    switch (command) {
-      case "help":
-        terminalOutput.innerHTML +=
-          "<div>Available commands: help, skills, quote, projects, contact, clear</div>";
-        break;
-      case "skills":
-        terminalOutput.innerHTML +=
-          "<div>Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs, GraphQl</div>";
-        break;
-      case "quote":
-        terminalOutput.innerHTML +=
-          "<div>The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela</div>";
-        break;
-      case "projects":
-        terminalOutput.innerHTML += "https://github.com/semosem";
-        break;
-      case "contact":
-        terminalOutput.innerHTML += "<div>Contact: dwell.sem@gmail.com</div>";
-        break;
-      case "clear":
-        terminalOutput.innerHTML = "";
-        break;
-      default:
-        terminalOutput.innerHTML +=
-          "<div>Command not recognized. Type 'help' for available commands.</div>";
-    }
+  const command = terminalInput.value.trim();
+  if (!command) return;
 
-    terminalInput.value = "";
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  appendPromptLine(command);
+
+  const normalized = command.toLowerCase();
+  switch (normalized) {
+    case "help":
+      appendTerminalLine(
+        "Available commands: help, skills, quote, projects, contact, clear",
+        "terminal-line"
+      );
+      break;
+    case "skills":
+      appendTerminalLine(
+        "Skills: JavaScript, TypeScript, React, Vue.js, Node.js, Angular, HTML5, CSS3, Git, RESTful APIs, GraphQL",
+        "terminal-line"
+      );
+      break;
+    case "quote":
+      appendTerminalLine(
+        "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+        "terminal-line"
+      );
+      break;
+    case "projects":
+      appendTerminalLine("https://github.com/semosem", "terminal-line");
+      break;
+    case "contact":
+      appendTerminalLine("Contact: dwell.sem@gmail.com", "terminal-line");
+      break;
+    case "clear":
+      terminalOutput.replaceChildren();
+      terminalInput.value = "";
+      return;
+    default:
+      appendTerminalLine(
+        "Command not recognized. Type 'help' for available commands.",
+        "terminal-line"
+      );
   }
+
+  terminalInput.value = "";
+  terminalOutput.scrollTop = terminalOutput.scrollHeight;
 });
 
-// Skill pills interactivity
 const skillPills = document.querySelectorAll(".skill-pill");
 skillPills.forEach((pill) => {
   pill.addEventListener("click", () => {
     const skill = pill.textContent;
-    terminalOutput.innerHTML += `<div><span class="prompt">$</span> 
-    [INFO] Analyzing Skill: ${skill}</div>`;
-    terminalOutput.innerHTML += `<div>
-    <p>============================</p>
-Experience Level: Strong</div>`;
+    const details = `[INFO] Analyzing Skill: ${skill}\n============================\nExperience Level: Strong`;
+
+    appendTerminalLine(`skill --explore ${skill}`, "terminal-line");
+    appendTerminalLine(details, "terminal-info", true);
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
   });
 });
+
+updateContent();
