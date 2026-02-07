@@ -10,6 +10,13 @@ const terminalOutput = document.getElementById("terminal-output");
 const titleElement = document.querySelector("h1");
 
 let isPlaying = false;
+const MAX_GIFS = 18;
+const gifPool = [];
+let intensity = 0;
+let easedIntensity = 0;
+let rainSpeed = 1;
+let trailAlpha = 0.08;
+let glitchStrength = 0.1;
 
 const audio = new Audio("./mixkit-double-little-bird-chirp-21.wav");
 audio.loop = true;
@@ -44,6 +51,10 @@ const prefersReducedMotion = window.matchMedia(
 
 function clampIndex(value, length) {
   return Math.max(0, Math.min(length - 1, value));
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
 }
 
 function setSoundButtonState(playing) {
@@ -84,29 +95,73 @@ setSoundButtonState(isPlaying);
 
 function updateContent() {
   const value = parseInt(slider.value, 10);
-  const index = clampIndex(
-    Math.floor(value / (100 / resumeContent.length)),
-    resumeContent.length
-  );
+  intensity = value / 100;
+  easedIntensity = Math.pow(intensity, 1.35);
+  const stepIndex = Math.floor(value / 10);
+  const index =
+    value === 100
+      ? resumeContent.length
+      : Math.min(resumeContent.length - 1, stepIndex);
 
-  resumeElement.textContent = resumeContent[index];
+  resumeElement.textContent = resumeContent[index] ?? "undefined";
+  resumeElement.dataset.text = resumeElement.textContent;
 
-  const hue = 115 + (value / 100) * 50;
+  const hue = 115 + intensity * 50;
   if (titleElement) {
-    titleElement.style.textShadow = `0 0 ${value / 2}px #0f0`;
+    titleElement.style.textShadow = `0 0 ${10 + easedIntensity * 22}px #0f0`;
   }
-  backgroundElement.style.opacity = 0.35 + (value / 100) * 0.4;
+  backgroundElement.style.opacity = 0.35 + intensity * 0.4;
   backgroundElement.style.background = `radial-gradient(ellipse at center, hsl(${hue}, 100%, 45%) 0%, #000 70%)`;
+  resumeElement.style.letterSpacing = `${0.2 + easedIntensity * 1.1}px`;
+  resumeElement.style.textShadow = `0 0 ${8 + easedIntensity * 18}px rgba(0, 255, 106, ${
+    0.45 + easedIntensity * 0.35
+  })`;
+  resumeElement.style.filter = `drop-shadow(0 0 ${6 + easedIntensity * 12}px rgba(0, 255, 106, ${
+    0.3 + easedIntensity * 0.4
+  }))`;
+  resumeElement.style.textTransform = value > 80 ? "uppercase" : "none";
 
-  if (value > 50) {
+  const shouldShake = value > 45 && !prefersReducedMotion;
+  if (shouldShake) {
     document.body.classList.add("shake");
-    resumeElement.classList.add("rotate");
-    slider.style.background = "linear-gradient(90deg, #00ff6a, #ff0, #f00)";
+    document.body.style.animationDuration = `${clamp(
+      0.6 - easedIntensity * 0.4,
+      0.18,
+      0.6
+    )}s`;
   } else {
     document.body.classList.remove("shake");
-    resumeElement.classList.remove("rotate");
-    slider.style.background = "linear-gradient(90deg, #00ff6a, #00ffa8)";
+    document.body.style.animationDuration = "";
   }
+
+  if (value > 55 && !prefersReducedMotion) {
+    resumeElement.classList.add("rotate");
+    resumeElement.style.animationDuration = `${clamp(
+      140 - easedIntensity * 80,
+      40,
+      140
+    )}s`;
+  } else {
+    resumeElement.classList.remove("rotate");
+    resumeElement.style.animationDuration = "";
+  }
+
+  const fillColor = value > 75 ? "#ff4d4d" : value > 55 ? "#ffe066" : "#00ff6a";
+  slider.style.background = `linear-gradient(90deg, ${fillColor} 0%, ${fillColor} ${value}%, rgba(0, 255, 106, 0.2) ${value}%, rgba(0, 255, 106, 0.2) 100%)`;
+
+  document.documentElement.style.setProperty(
+    "--scanline-opacity",
+    String(0.12 + easedIntensity * 0.28)
+  );
+  document.documentElement.style.setProperty(
+    "--matrix-opacity",
+    String(0.45 + easedIntensity * 0.45)
+  );
+  canvas.style.opacity = String(0.45 + easedIntensity * 0.45);
+
+  rainSpeed = 0.6 + easedIntensity * 2.2;
+  trailAlpha = clamp(0.14 - easedIntensity * 0.09, 0.04, 0.14);
+  glitchStrength = 0.08 + easedIntensity * 0.25;
 
   updateGifs(value);
 
@@ -117,28 +172,54 @@ function updateContent() {
     resumeElement.style.fontSize = "2em";
     resumeElement.style.color = "#ff4d4d";
     resumeElement.style.textShadow = "0 0 10px #fff";
+    resumeElement.style.filter = "";
   } else {
     document.body.style.animation = "";
     resumeElement.style.fontSize = "";
     resumeElement.style.color = "";
     resumeElement.style.textShadow = "";
+    resumeElement.style.filter = "";
   }
 }
 
 function updateGifs(value) {
-  const numGifs = Math.floor(value / 10);
-  gifContainer.innerHTML = "";
+  if (!gifPool.length) {
+    for (let i = 0; i < MAX_GIFS; i++) {
+      const gif = document.createElement("img");
+      gif.src = gifs[i % gifs.length];
+      gif.className = "gif";
+      gif.loading = "lazy";
+      gif.decoding = "async";
+      gifContainer.appendChild(gif);
+      gifPool.push(gif);
+      randomizeGif(gif, true);
+    }
+  }
 
-  for (let i = 0; i < numGifs; i++) {
-    const gif = document.createElement("img");
-    gif.src = gifs[i % gifs.length];
-    gif.className = "gif";
-    gif.style.left = `${Math.random() * 90}%`;
-    gif.style.top = `${Math.random() * 90}%`;
-    gif.style.width = `${250 + Math.random() * 100}px`;
-    gif.style.height = "auto";
-    gif.style.opacity = Math.min(1, value / 50);
-    gifContainer.appendChild(gif);
+  const targetCount = Math.round(Math.pow(intensity, 1.6) * MAX_GIFS);
+  const opacity = Math.min(1, 0.15 + intensity * 1.2);
+
+  gifPool.forEach((gif, index) => {
+    if (index < targetCount) {
+      gif.style.opacity = String(opacity);
+      gif.style.transform = `scale(${0.85 + easedIntensity * 0.4})`;
+      if (intensity > 0.7 && Math.random() < 0.12) {
+        randomizeGif(gif);
+      }
+    } else {
+      gif.style.opacity = "0";
+    }
+  });
+}
+
+function randomizeGif(gif, initial = false) {
+  const size = 200 + Math.random() * 180;
+  gif.style.left = `${Math.random() * 90}%`;
+  gif.style.top = `${Math.random() * 85}%`;
+  gif.style.width = `${size}px`;
+  gif.style.height = "auto";
+  if (initial) {
+    gif.style.transform = "scale(0.9)";
   }
 }
 
@@ -190,7 +271,7 @@ function resizeCanvas() {
 }
 
 function drawMatrixRain() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+  ctx.fillStyle = `rgba(0, 0, 0, ${trailAlpha})`;
   ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
   ctx.fillStyle = "#00ff6a";
@@ -202,10 +283,13 @@ function drawMatrixRain() {
     );
     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-    if (drops[i] * fontSize > window.innerHeight && Math.random() > 0.975) {
+    if (
+      drops[i] * fontSize > window.innerHeight &&
+      Math.random() > 0.985 - easedIntensity * 0.02
+    ) {
       drops[i] = 0;
     }
-    drops[i]++;
+    drops[i] += rainSpeed;
   }
 }
 
@@ -292,7 +376,7 @@ function glitchEffect() {
   let glitchedText = "";
 
   for (let i = 0; i < glitchText.length; i++) {
-    if (Math.random() > 0.9) {
+    if (Math.random() < glitchStrength) {
       glitchedText += String.fromCharCode(33 + Math.floor(Math.random() * 94));
     } else {
       glitchedText += glitchText[i];

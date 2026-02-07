@@ -5,6 +5,8 @@
   --glass: rgba(0, 0, 0, 0.65);
   --border: rgba(0, 255, 106, 0.35);
   --glow: 0 0 18px rgba(0, 255, 106, 0.55);
+  --scanline-opacity: 0.2;
+  --matrix-opacity: 0.6;
 }
 
 body,
@@ -35,7 +37,7 @@ body {
     rgba(0, 0, 0, 0) 2px,
     rgba(0, 0, 0, 0.2) 3px
   );
-  opacity: 0.2;
+  opacity: var(--scanline-opacity);
   mix-blend-mode: overlay;
   pointer-events: none;
   z-index: 4;
@@ -80,7 +82,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 1;
-  opacity: 0.6;
+  opacity: var(--matrix-opacity);
   mix-blend-mode: screen;
   filter: blur(0.2px);
 }
@@ -111,14 +113,45 @@ h1 {
   line-height: 1.6;
   max-width: 820px;
   margin-bottom: 30px;
-  transition: all 0.5s ease;
+  transition: color 0.4s ease, text-shadow 0.4s ease,
+    letter-spacing 0.4s ease, transform 0.4s ease, filter 0.4s ease;
   min-height: 140px;
-  background: var(--glass);
-  padding: 22px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  box-shadow: var(--glow), inset 0 0 20px rgba(0, 255, 106, 0.1);
-  backdrop-filter: blur(4px);
+  padding: 8px 6px;
+  position: relative;
+  z-index: 2;
+  -webkit-text-stroke: 0.35px rgba(0, 255, 106, 0.6);
+  color: var(--matrix-bright);
+  text-shadow: 0 0 14px rgba(0, 255, 106, 0.35);
+}
+
+#resume::before,
+#resume::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#resume::before {
+  color: rgba(0, 255, 106, 0.35);
+  text-shadow: 0 0 16px rgba(0, 255, 106, 0.6);
+  transform: translate(1px, 0);
+  mix-blend-mode: screen;
+  filter: blur(0.6px);
+  opacity: 0.7;
+  animation: ghostShift 4s ease-in-out infinite;
+}
+
+#resume::after {
+  color: rgba(0, 255, 106, 0.18);
+  text-shadow: 0 0 24px rgba(0, 255, 106, 0.4);
+  transform: translate(-1px, 1px);
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  animation: ghostShift 6s ease-in-out infinite;
 }
 
 #gif-container {
@@ -135,7 +168,10 @@ h1 {
 .gif {
   position: absolute;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, transform 0.6s ease;
+  mix-blend-mode: screen;
+  filter: saturate(1.2);
+  will-change: transform, opacity;
 }
 
 #slider-container {
@@ -217,23 +253,33 @@ h1 {
   flex-wrap: wrap;
   gap: 10px;
   max-width: 320px;
-  z-index: 2;
+  z-index: 9999;
 }
 
 .skill-pill {
-  background: rgba(0, 255, 106, 0.08);
-  border: 1px solid var(--border);
+  background: rgba(0, 255, 106, 0.32);
+  border: 1px solid rgba(128, 255, 196, 0.95);
   border-radius: 15px;
-  padding: 5px 10px;
-  font-size: 0.8em;
+  padding: 7px 12px;
+  font-size: 0.88em;
+  font-weight: 600;
+  color: #eafff2;
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.95),
+    0 0 22px rgba(0, 255, 106, 0.85);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.7),
+    0 0 24px rgba(0, 255, 106, 0.7);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
   transition: all 0.3s ease;
   cursor: pointer;
+  mix-blend-mode: normal;
 }
 
 .skill-pill:hover {
-  background: rgba(0, 255, 106, 0.2);
-  transform: scale(1.06);
-  box-shadow: 0 0 12px rgba(0, 255, 106, 0.5);
+  background: rgba(0, 255, 106, 0.55);
+  transform: translateY(-1px) scale(1.08);
+  box-shadow: 0 0 16px rgba(0, 255, 136, 0.95),
+    0 0 34px rgba(0, 255, 106, 0.9);
 }
 
 #terminal {
@@ -252,7 +298,7 @@ h1 {
   overflow-y: auto;
   display: block;
   box-shadow: var(--glow), inset 0 0 20px rgba(0, 255, 106, 0.1);
-  z-index: 2;
+  z-index: 9999;
 }
 
 #terminal-input {
@@ -306,7 +352,7 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  z-index: 2;
+  z-index: 9999;
 }
 
 #soundButton {
@@ -351,6 +397,18 @@ h1 {
   }
   100% {
     text-shadow: 0 0 5px #0f0;
+  }
+}
+
+@keyframes ghostShift {
+  0% {
+    transform: translate(1px, 0);
+  }
+  50% {
+    transform: translate(-1px, 1px);
+  }
+  100% {
+    transform: translate(1px, 0);
   }
 }
 
@@ -436,7 +494,7 @@ h1 {
   top: 20px;
   right: 20px;
   cursor: pointer;
-  z-index: 2;
+  z-index: 9999;
 }
 
 #cv-icon svg {
@@ -459,7 +517,7 @@ h1 {
   padding: 18px;
   display: none;
   max-width: 520px;
-  z-index: 2;
+  z-index: 9999;
   box-shadow: var(--glow);
   transform: translateY(-12px);
   opacity: 0;
@@ -543,5 +601,10 @@ h1 {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition: none !important;
+  }
+
+  #resume::before,
+  #resume::after {
+    animation: none !important;
   }
 }
