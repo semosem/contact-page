@@ -157,11 +157,19 @@ export const initUI = ({
         ? resumeContent.length
         : Math.min(resumeContent.length - 1, stepIndex);
 
-    const resumeText =
-      value === sliderMax ? "CALL NOW!" : resumeContent[index] ?? "undefined";
-    dom.resume.textContent = resumeText;
+    const isMax = value === sliderMax;
+    const resumeText = isMax
+      ? "CALL NOW!"
+      : resumeContent[index] ?? "undefined";
+
+    if (isMax) {
+      dom.resume.innerHTML = `<span class="call-text">${resumeText}</span><span class="call-fire" aria-hidden="true"></span>`;
+    } else {
+      dom.resume.textContent = resumeText;
+    }
+
     dom.resume.dataset.text = resumeText;
-    dom.resume.classList.toggle("call-flash", value === sliderMax);
+    dom.resume.classList.toggle("call-flash", isMax);
 
     const hue = 115 + state.intensity * 50;
     if (dom.title) {
