@@ -4,13 +4,22 @@ Matrix-inspired personal contact page with interactive slider, terminal, and amb
 
 ## Run Locally
 
-Open `index.html` in a browser. No build step required.
+This project uses native ES modules, so open it with a local web server.
+
+```bash
+python3 -m http.server
+```
+
+Then visit `http://localhost:8000`.
 
 ## Structure
 
 - `index.html` – markup
 - `styles.css` – visual styling and animations
-- `script.js` – interactions (slider, matrix rain, terminal)
+- `js/main.js` – app entry point
+- `js/ui.js` – UI logic (slider, terminal, CV, sound)
+- `js/matrix.js` – matrix rain + glitch
+- `js/data.js` – shared constants
 - `mixkit-double-little-bird-chirp-21.wav` – ambient sound
 
 ## Notes
