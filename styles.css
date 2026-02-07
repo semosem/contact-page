@@ -5,6 +5,7 @@
   --glow: 0 0 18px rgba(0, 255, 106, 0.55);
   --scanline-opacity: 0.2;
   --matrix-opacity: 0.6;
+  --slider-bottom: 18%;
 }
 
 body,
@@ -100,6 +101,7 @@ h1 {
   margin-bottom: 8px;
   text-shadow: 0 0 12px rgba(0, 255, 106, 0.6);
   letter-spacing: 0.5px;
+  padding: 0 clamp(16px, 4vw, 48px);
 }
 
 #resume {
@@ -170,7 +172,7 @@ h1 {
 
 #slider-container {
   position: fixed;
-  bottom: 18%;
+  bottom: var(--slider-bottom);
   left: 50%;
   transform: translateX(-50%);
   width: 80%;
@@ -284,7 +286,11 @@ h1 {
 }
 
 #keyboard-hint {
-  margin-top: 10px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--slider-bottom) + 24px);
+  margin-top: 0;
   font-size: 12.5px;
   opacity: 0.9;
   text-transform: uppercase;
@@ -292,6 +298,8 @@ h1 {
   color: #eafff2;
   text-shadow: 0 0 10px rgba(0, 255, 136, 0.85),
     0 0 18px rgba(0, 255, 106, 0.6);
+  z-index: 2;
+  pointer-events: none;
 }
 
 #skills-container {
@@ -351,13 +359,16 @@ h1 {
 }
 
 #terminal-input {
-  width: 100%;
+  width: auto;
+  flex: 1;
+  min-width: 0;
   background: transparent;
   border: none;
   color: var(--matrix-green);
   font-family: "Share Tech Mono", "Courier New", monospace;
   font-size: 14px;
   outline: none;
+  caret-color: transparent;
 }
 
 #terminal-output {
@@ -369,6 +380,19 @@ h1 {
 #terminal-input-line {
   display: flex;
   align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+#terminal-input-line::after {
+  content: "";
+  width: 10px;
+  height: 16px;
+  background: rgba(0, 255, 106, 0.85);
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(0, 255, 106, 0.8),
+    0 0 14px rgba(0, 255, 106, 0.6);
+  animation: cursorBlink 1s steps(2, start) infinite;
 }
 
 .prompt {
@@ -458,6 +482,21 @@ h1 {
   }
   100% {
     text-shadow: 0 0 5px #0f0;
+  }
+}
+
+@keyframes cursorBlink {
+  0% {
+    opacity: 1;
+  }
+  49% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -597,11 +636,19 @@ h1 {
 
 .call-flash {
   animation: callFlash 0.55s steps(2, end) infinite,
-    callZoom 0.5s ease-in-out infinite;
+    callZoom 0.2s ease-in-out infinite alternate;
   text-transform: uppercase;
   letter-spacing: 2px;
   display: inline-block;
   transform-origin: center;
+  font-family: "Anton", "Share Tech Mono", monospace;
+  font-weight: 900;
+  text-shadow: 0 0 18px rgba(255, 90, 90, 1),
+    0 0 36px rgba(255, 90, 90, 0.9);
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @keyframes callFlash {
@@ -629,10 +676,10 @@ h1 {
     transform: scale(1);
   }
   35% {
-    transform: scale(2.2);
+    transform: scale(10);
   }
   55% {
-    transform: scale(2.2);
+    transform: scale(10);
   }
   100% {
     transform: scale(1);
@@ -734,6 +781,10 @@ h1 {
 }
 
 @media (max-width: 900px), (max-height: 700px) {
+  :root {
+    --slider-bottom: 12%;
+  }
+
   #terminal {
     width: 320px;
     height: 140px;

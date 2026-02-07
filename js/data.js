@@ -10,14 +10,14 @@ export const SETTINGS = {
 export const MATRIX_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export const RESUME_CONTENT = [
-  "Extensive expertise in diverse, team-oriented software engineering projects",
-  "In-depth understanding of ReactJS, VueJS, NodeJS, and Angular, with a track record of developing robust applications in each.",
-  "Complimented for my git commits being precise and well-documented, ensuring easy collaboration and maintenance.",
-  "Expert at identifying and fixing bugs, with a proactive approach to problem-solving.",
-  "Strong grasp of Component-based UIs, HTML DOM tree, render tree, and critical rendering path, ensuring optimal performance and user experience.",
-  "8+ years of proven experience in building TypeScript and JavaScript web services and web development. Successfully led projects that improved system efficiency by 30%.",
-  "Fast and efficient coding skills, consistently delivering high-quality work ahead of deadlines.",
-  "My code is optimized for performance, resulting in fast and reliable applications.",
+  "I turn ideas into reliable software with clean and maintainable code.",
+  "Comfortable across React, Vue, Node, and Angular in real production work.",
+  "Known for precise git history and disciplined, low-noise collaboration.",
+  "I hunt bugs fast and fix root causes, not just symptoms.",
+  "I sweat performance: render paths, component design, and UX latency.",
+  "8+ years delivering JS/TS systems that scale and stay stable.",
+  "Led projects that cut load times and improved system efficiency by 30%.",
+  "You get a builder who ships fast, sweats detail, and raises the bar.",
 ];
 
 export const GIFS = [
