@@ -10,7 +10,7 @@ export const SETTINGS = {
 export const MATRIX_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export const RESUME_CONTENT = [
-  "I turn ideas into reliable software with clean and maintainable code.",
+  "Lets turn ideas into reliable software with clean and maintainable code.",
   "Comfortable across React, Vue, Node, and Angular in real production work.",
   "Known for precise git history and disciplined, low-noise collaboration.",
   "I hunt bugs fast and fix root causes, not just symptoms.",
