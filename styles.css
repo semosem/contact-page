@@ -306,13 +306,6 @@ h1 {
   margin-bottom: 1rem;
 }
 
-h1 span {
-  font-size: 0.72em;
-  font-weight: 400;
-  opacity: 0.85;
-  text-shadow: 0 0 10px rgba(0, 255, 106, 0.45);
-}
-
 h1 .title-name {
   font-size: 1em;
   font-weight: 600;
@@ -323,6 +316,7 @@ h1 .title-role {
   font-size: 0.72em;
   font-weight: 400;
   opacity: 0.85;
+  text-shadow: 0 0 10px rgba(0, 255, 106, 0.45);
 }
 
 #resume {
@@ -577,7 +571,6 @@ h1 .title-role {
   max-width: 320px;
   z-index: 9999;
 }
-
 
 .skill-pill {
   background: rgba(0, 255, 106, 0.32);
@@ -864,7 +857,6 @@ h1 .title-role {
     opacity: 0.35;
   }
 }
-
 
 @keyframes pageSweep {
   0% {
@@ -1260,7 +1252,7 @@ h1 .title-role {
     border-radius: 0;
     background: none;
     border: none;
-  box-shadow: none;
+    box-shadow: none;
     scrollbar-width: none;
     scroll-snap-type: x proximity;
   }
@@ -1350,17 +1342,9 @@ h1 .title-role {
   }
 
   #terminal-input-line {
-    gap: 6px;
-    font-size: 13px;
+    gap: 4px;
+    font-size: 12px;
     letter-spacing: 0.4px;
-  }
-
-  #terminal-input {
-    font-size: 13px;
-  }
-
-  #terminal-hover-header {
-    left: 14px;
   }
 
   #terminal-output,
@@ -1368,8 +1352,8 @@ h1 .title-role {
     font-size: 12px;
   }
 
-  #terminal-input-line {
-    gap: 3px;
+  #terminal-hover-header {
+    left: 14px;
   }
 
   .control-container {
