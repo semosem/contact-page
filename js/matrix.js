@@ -114,21 +114,39 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
 export const startTitleGlitch = ({ title, prefersReducedMotion, interval, getStrength }) => {
   if (!title || prefersReducedMotion) return null;
 
-  const glitch = () => {
-    const originalText = title.innerText;
-    let glitchedText = "";
+  const nameSpan = title.querySelector(".title-name");
+  const roleSpan = title.querySelector(".title-role");
+  const originalHtml = title.innerHTML;
+  const originalName = nameSpan ? nameSpan.textContent : title.textContent || "";
+  const originalRole = roleSpan ? roleSpan.textContent : "";
 
-    for (let i = 0; i < originalText.length; i += 1) {
+  const glitchText = (text) => {
+    let glitchedText = "";
+    for (let i = 0; i < text.length; i += 1) {
       if (Math.random() < getStrength()) {
         glitchedText += String.fromCharCode(33 + Math.floor(Math.random() * 94));
       } else {
-        glitchedText += originalText[i];
+        glitchedText += text[i];
       }
     }
+    return glitchedText;
+  };
 
-    title.innerText = glitchedText;
+  const glitch = () => {
+    if (nameSpan && roleSpan) {
+      nameSpan.textContent = glitchText(originalName);
+      roleSpan.textContent = glitchText(originalRole);
+    } else {
+      const originalText = title.textContent || "";
+      title.textContent = glitchText(originalText);
+    }
     setTimeout(() => {
-      title.innerText = originalText;
+      if (nameSpan && roleSpan) {
+        nameSpan.textContent = originalName;
+        roleSpan.textContent = originalRole;
+      } else {
+        title.innerHTML = originalHtml;
+      }
     }, 100);
   };
 

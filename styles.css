@@ -101,6 +101,25 @@ h1 {
   margin-bottom: 1rem;
 }
 
+h1 span {
+  font-size: 0.72em;
+  font-weight: 400;
+  opacity: 0.85;
+  text-shadow: 0 0 10px rgba(0, 255, 106, 0.45);
+}
+
+h1 .title-name {
+  font-size: 1em;
+  font-weight: 600;
+  opacity: 1;
+}
+
+h1 .title-role {
+  font-size: 0.72em;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
 #resume {
   font-size: clamp(1rem, 2vw, 1.8rem);
   line-height: 1.6;
@@ -854,38 +873,69 @@ h1 {
 
   #content {
     justify-content: flex-start;
-    padding: 150px 18px 220px;
+    padding: calc(150px + env(safe-area-inset-top)) 22px
+      calc(230px + env(safe-area-inset-bottom));
+    align-items: flex-start;
+    text-align: left;
+    gap: 12px;
+    width: 100%;
+    margin: 0;
   }
 
   h1 {
-    font-size: clamp(2rem, 7vw, 3rem);
-    margin-bottom: 0.6rem;
+    font-size: clamp(2.1rem, 7.4vw, 3.1rem);
+    margin-bottom: 0.5rem;
+    line-height: 1.08;
+    letter-spacing: 0.8px;
+    max-width: 22ch;
+    text-wrap: balance;
+    text-shadow: 0 0 18px rgba(0, 255, 106, 0.45);
+  }
+
+  h1 .title-role {
+    font-size: 0.7em;
   }
 
   #resume {
-    font-size: clamp(0.95rem, 3.6vw, 1.35rem);
-    margin-bottom: 18px;
-    max-width: 92vw;
+    font-size: clamp(1rem, 3.4vw, 1.32rem);
+    margin-bottom: 14px;
+    max-width: 58ch;
+    line-height: 1.58;
+    letter-spacing: 0.35px;
+    text-wrap: balance;
+    color: rgba(220, 255, 235, 0.95);
+  }
+
+  h1,
+  #resume {
+    max-width: 640px;
+  }
+
+  #resume::before {
+    opacity: 0.35;
+    filter: blur(0.4px);
+  }
+
+  #resume::after {
+    opacity: 0.12;
+    filter: blur(0.8px);
   }
 
   #skills-container {
-    top: 12px;
+    top: 14px;
     left: 50%;
     transform: translateX(-50%);
-    width: 92vw;
-    max-width: 92vw;
+    width: calc(100% - 44px);
+    max-width: 640px;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 6px 10px;
-    border-radius: 16px;
-    background: linear-gradient(
-      90deg,
-      rgba(0, 40, 10, 0.65),
-      rgba(0, 10, 0, 0.4)
-    );
-    border: 1px solid rgba(0, 255, 140, 0.4);
-    box-shadow: 0 0 18px rgba(0, 255, 106, 0.25);
+    padding: 6px 0;
+    border-radius: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
     scrollbar-width: none;
+    scroll-snap-type: x proximity;
   }
 
   #skills-container::-webkit-scrollbar {
@@ -893,14 +943,20 @@ h1 {
   }
 
   .skill-pill {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     padding: 6px 10px;
     white-space: nowrap;
+    letter-spacing: 0.8px;
+    scroll-snap-align: start;
+    background: rgba(0, 255, 106, 0.18);
+    border-color: rgba(128, 255, 196, 0.8);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.55),
+      0 0 18px rgba(0, 255, 106, 0.45);
   }
 
   #slider-container {
-    width: 92vw;
-    max-width: 520px;
+    width: calc(100% - 44px);
+    max-width: 640px;
   }
 
   #slider {
@@ -942,16 +998,27 @@ h1 {
     left: 50%;
     transform: translateX(-50%);
     bottom: 14px;
-    width: min(92vw, 520px);
+    width: min(92vw, 560px);
     height: 72px;
     padding-top: 24px;
     border-radius: 12px;
     transition: box-shadow 0.2s ease, border-color 0.2s ease,
       height 0.2s ease;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
   #terminal:focus-within {
     height: 200px;
+  }
+
+  #terminal:not(:focus-within) #terminal-output {
+    display: none;
+  }
+
+  #terminal:not(:focus-within) #terminal-input-line {
+    opacity: 0.75;
   }
 
   #terminal-output,
@@ -979,7 +1046,7 @@ h1 {
 
   #cv-icon {
     top: 90px;
-    right: 12px;
+    right: 22px;
   }
 
   #cv-icon svg {
@@ -992,6 +1059,52 @@ h1 {
     right: 12px;
     top: 140px;
     max-width: none;
+    max-height: 45vh;
+    overflow-y: auto;
+    padding: 14px 12px;
+    box-sizing: border-box;
+  }
+
+  #cv-dropdown li {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    letter-spacing: 0.2px;
+    word-spacing: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    padding: 8px 6px;
+  }
+}
+
+@media (max-width: 430px) {
+  #content {
+    padding: calc(155px + env(safe-area-inset-top)) 18px
+      calc(230px + env(safe-area-inset-bottom));
+  }
+
+  h1 {
+    font-size: clamp(2rem, 7.8vw, 2.9rem);
+    text-shadow: 0 0 14px rgba(0, 255, 106, 0.4);
+  }
+
+  #resume {
+    font-size: clamp(1rem, 4.1vw, 1.25rem);
+    line-height: 1.52;
+    -webkit-text-stroke: 0.2px rgba(0, 255, 106, 0.45);
+    text-shadow: 0 0 10px rgba(0, 255, 106, 0.3);
+  }
+
+  #resume::before {
+    opacity: 0.25;
+  }
+
+  #resume::after {
+    opacity: 0.08;
+  }
+
+  #matrix-rain {
+    opacity: 0.45;
   }
 }
 
