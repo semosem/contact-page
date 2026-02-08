@@ -35,6 +35,7 @@ export const initUI = ({
       playing ? "Mute matrix hum" : "Play matrix hum"
     );
     dom.soundButton.classList.toggle("is-audio-on", playing);
+    document.body.classList.toggle("hireme-active", playing);
   };
 
   const startMatrixHum = () => {

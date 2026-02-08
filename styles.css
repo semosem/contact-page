@@ -24,6 +24,211 @@ body {
   background: radial-gradient(ellipse at center, #003018 0%, #000 70%);
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(0, 255, 106, 0) 24%,
+    rgba(0, 255, 106, 0.28) 50%,
+    rgba(0, 255, 106, 0) 76%
+  );
+  opacity: 0.65;
+  transform: translateX(-120%);
+  animation: pageSweep 3.2s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 60, 60, 0) 22%,
+    rgba(255, 60, 60, 0.22) 48%,
+    rgba(255, 60, 60, 0) 76%
+  );
+  opacity: 0.5;
+  transform: translateX(120%);
+  animation: pageSweepSecondary 4.4s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+body.perf-mobile::before {
+  opacity: 0.45;
+}
+
+body.perf-mobile::after {
+  opacity: 0.35;
+}
+
+body.perf-mobile .sweep-yellow {
+  display: none;
+}
+
+body.perf-mobile #slider-container::before {
+  filter: blur(12px);
+  opacity: 0.7;
+}
+
+body.perf-mobile #slider {
+  box-shadow: 0 0 6px rgba(0, 255, 106, 0.5),
+    0 0 2px rgba(0, 255, 106, 0.6);
+}
+
+body.perf-mobile .skill-pill {
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.45),
+    0 0 14px rgba(0, 255, 106, 0.35);
+}
+
+body .sweep-yellow {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 220, 80, 0) 18%,
+    rgba(255, 220, 80, 0.22) 50%,
+    rgba(255, 220, 80, 0) 82%
+  );
+  opacity: 0.45;
+  transform: translateX(-120%);
+  animation: pageSweepTertiary 5.2s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+#hireme-rig {
+  position: fixed;
+  left: 100%;
+  top: 34%;
+  transform: translate(0, -50%);
+  z-index: 6;
+  pointer-events: none;
+  animation: rigDrift 14s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+body.hireme-active #hireme-rig {
+  animation-play-state: running;
+}
+
+#hireme-rig .rig-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transform-origin: right center;
+  animation: rigSwim 3.6s ease-in-out infinite;
+}
+
+#hireme-machine {
+  width: clamp(120px, 16vw, 200px);
+  height: auto;
+  filter: drop-shadow(0 0 12px rgba(0, 255, 106, 0.35))
+    drop-shadow(0 0 20px rgba(0, 255, 140, 0.25));
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+#hireme-rig .rig-flag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(0, 25, 5, 0.85);
+  border: 1px solid rgba(0, 255, 140, 0.75);
+  border-radius: 999px;
+  box-shadow: 0 0 18px rgba(0, 255, 106, 0.7),
+    inset 0 0 12px rgba(0, 255, 140, 0.35);
+  transform-origin: right center;
+  transform: scaleX(0.1);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  pointer-events: auto;
+}
+
+body.hireme-active #hireme-rig .rig-flag {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+#hireme-rig .flag-text {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #eafff2;
+  text-shadow: 0 0 12px rgba(0, 255, 106, 0.8);
+}
+
+#hireme-rig .flag-link {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 140, 0.7);
+  box-shadow: 0 0 12px rgba(0, 255, 140, 0.7);
+  background: rgba(0, 15, 0, 0.7);
+  text-decoration: none;
+  animation: iconWobble 1.6s ease-in-out infinite;
+}
+
+#hireme-rig .flag-link svg {
+  width: 14px;
+  height: 14px;
+  fill: #7dffb9;
+}
+
+@keyframes rigSwim {
+  0% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+}
+
+@keyframes rigDrift {
+  0% {
+    transform: translate(0, -50%) translateY(0);
+  }
+  25% {
+    transform: translate(-35vw, -50%) translateY(-8px);
+  }
+  50% {
+    transform: translate(-70vw, -50%) translateY(6px);
+  }
+  75% {
+    transform: translate(-110vw, -50%) translateY(-4px);
+  }
+  100% {
+    transform: translate(-140vw, -50%) translateY(2px);
+  }
+}
+
+@keyframes iconWobble {
+  0% {
+    transform: rotate(-5deg) translateY(0);
+  }
+  50% {
+    transform: rotate(5deg) translateY(-2px);
+  }
+  100% {
+    transform: rotate(-5deg) translateY(0);
+  }
+}
+
 #scanlines {
   position: fixed;
   top: 0;
@@ -373,21 +578,6 @@ h1 .title-role {
   z-index: 9999;
 }
 
-#skills-container::after {
-  content: "";
-  position: absolute;
-  inset: -4px 0;
-  background: linear-gradient(
-    120deg,
-    rgba(0, 255, 106, 0) 10%,
-    rgba(0, 255, 106, 0.35) 45%,
-    rgba(0, 255, 106, 0) 70%
-  );
-  opacity: 0.35;
-  transform: translateX(-120%);
-  animation: skillSweep 8s ease-in-out infinite;
-  pointer-events: none;
-}
 
 .skill-pill {
   background: rgba(0, 255, 106, 0.32);
@@ -544,14 +734,14 @@ h1 .title-role {
   background: radial-gradient(circle, rgba(0, 255, 106, 0.15), rgba(0, 0, 0, 0.8));
   border: 2px solid rgba(0, 255, 140, 0.95);
   color: var(--matrix-green);
-  width: 112px;
-  height: 112px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 46px;
+  font-size: 29px;
   transition: all 0.3s ease;
   box-shadow: 0 0 12px rgba(0, 255, 106, 0.6),
     0 0 30px rgba(0, 255, 140, 0.8),
@@ -675,12 +865,28 @@ h1 .title-role {
   }
 }
 
-@keyframes skillSweep {
+
+@keyframes pageSweep {
   0% {
     transform: translateX(-120%);
   }
-  40% {
+  100% {
     transform: translateX(120%);
+  }
+}
+
+@keyframes pageSweepSecondary {
+  0% {
+    transform: translateX(120%);
+  }
+  100% {
+    transform: translateX(-120%);
+  }
+}
+
+@keyframes pageSweepTertiary {
+  0% {
+    transform: translateX(-120%);
   }
   100% {
     transform: translateX(120%);
@@ -865,6 +1071,30 @@ h1 .title-role {
   right: 20px;
   cursor: pointer;
   z-index: 9999;
+}
+
+#linkedin-link {
+  position: fixed;
+  top: 68px;
+  right: 22px;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(185, 255, 210, 0.95);
+  text-decoration: none;
+  padding: 6px 10px;
+  border: 1px solid rgba(0, 255, 140, 0.5);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(0, 255, 106, 0.4);
+  background: rgba(0, 20, 0, 0.6);
+  z-index: 9999;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+#linkedin-link:hover {
+  color: #eafff2;
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(0, 255, 140, 0.7);
 }
 
 #cv-icon svg {
@@ -1147,18 +1377,53 @@ h1 .title-role {
     left: auto;
     right: 40px;
     bottom: 40px;
+    transform: none;
     align-items: flex-end;
   }
 
   #soundButton {
-    width: 64px;
-    height: 64px;
-    font-size: 28px;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
   }
 
   #cv-icon {
     top: 90px;
     right: 22px;
+  }
+
+  #hireme-rig {
+    top: 36%;
+  }
+
+  #hireme-machine {
+    width: clamp(110px, 28vw, 180px);
+  }
+
+  #hireme-rig .rig-flag {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  #hireme-rig .flag-text {
+    font-size: 10px;
+  }
+
+  #hireme-rig .flag-link {
+    width: 22px;
+    height: 22px;
+  }
+
+  #hireme-rig .flag-link svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  #linkedin-link {
+    top: 130px;
+    right: 22px;
+    font-size: 10px;
+    padding: 5px 8px;
   }
 
   #cv-icon svg {

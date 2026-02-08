@@ -40,10 +40,26 @@ if (missing.length) {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
+  const isMobile = window.matchMedia(
+    "(max-width: 900px), (max-height: 700px)"
+  ).matches;
+
+  if (isMobile) {
+    document.body.classList.add("perf-mobile");
+  }
+
+  const tunedSettings = isMobile
+    ? {
+        ...SETTINGS,
+        maxGifs: Math.min(8, SETTINGS.maxGifs),
+        rainInterval: Math.max(45, SETTINGS.rainInterval),
+      }
+    : SETTINGS;
+
   const matrix = createMatrixRain({
     canvas: dom.canvas,
     chars: MATRIX_CHARS,
-    settings: SETTINGS,
+    settings: tunedSettings,
     prefersReducedMotion,
   });
 
@@ -52,7 +68,7 @@ if (missing.length) {
   } else {
     const ui = initUI({
       dom,
-      settings: SETTINGS,
+      settings: tunedSettings,
       resumeContent: RESUME_CONTENT,
       gifs: GIFS,
       konamiCode: KONAMI_CODE,
