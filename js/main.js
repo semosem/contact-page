@@ -17,6 +17,7 @@ const dom = {
   sliderSignal: document.querySelector("[data-hud=\"signal\"]"),
   sliderMode: document.querySelector("[data-hud=\"mode\"]"),
   sliderHud: document.getElementById("slider-hud"),
+  glitchGrid: document.getElementById("glitch-grid"),
 };
 
 const required = [

@@ -108,15 +108,18 @@ body .sweep-yellow {
   position: fixed;
   left: 100%;
   top: 34%;
-  transform: translate(-260px, -50%);
+  transform: translate(0, -50%);
   z-index: 6;
   pointer-events: none;
-  animation: rigDrift 14s ease-in-out infinite;
+  animation: rigDriftOnce 14s ease-in-out forwards;
   animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 body.hireme-active #hireme-rig {
   animation-play-state: running;
+  opacity: 1;
 }
 
 #hireme-rig .rig-body {
@@ -256,21 +259,44 @@ body.hireme-active #hireme-rig .rig-flag {
   }
 }
 
-@keyframes rigDrift {
+@keyframes rigDriftOnce {
   0% {
-    transform: translate(-260px, -50%) translateY(0);
+    transform: translate(0, -50%) translateY(0);
   }
   25% {
-    transform: translate(calc(-260px - 35vw), -50%) translateY(-8px);
+    transform: translate(-35vw, -50%) translateY(-8px);
   }
   50% {
-    transform: translate(calc(-260px - 70vw), -50%) translateY(6px);
+    transform: translate(-70vw, -50%) translateY(6px);
   }
   75% {
-    transform: translate(calc(-260px - 110vw), -50%) translateY(-4px);
+    transform: translate(-110vw, -50%) translateY(-4px);
   }
   100% {
-    transform: translate(calc(-260px - 140vw), -50%) translateY(2px);
+    transform: translate(-140vw, -50%) translateY(2px);
+  }
+}
+
+@keyframes glitchRects {
+  0% {
+    opacity: 0.05;
+    filter: blur(0.2px);
+  }
+  20% {
+    opacity: 0.9;
+    filter: blur(0.6px);
+  }
+  50% {
+    opacity: 0.15;
+    filter: blur(0.2px);
+  }
+  75% {
+    opacity: 0.8;
+    filter: blur(0.4px);
+  }
+  100% {
+    opacity: 0.1;
+    filter: blur(0.2px);
   }
 }
 
@@ -372,6 +398,73 @@ body.hireme-active #hireme-rig .rig-flag {
   opacity: var(--matrix-opacity);
   mix-blend-mode: screen;
   filter: blur(0.2px);
+}
+
+#glitch-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background-image:
+    linear-gradient(90deg, rgba(0, 255, 106, 0.18) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(0, 255, 106, 0.18) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px;
+  mix-blend-mode: screen;
+}
+
+#glitch-grid::before,
+#glitch-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 255, 106, 0.35) 0,
+      rgba(0, 255, 106, 0.35) 2px,
+      transparent 2px,
+      transparent 48px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 106, 0.25) 0,
+      rgba(0, 255, 106, 0.25) 2px,
+      transparent 2px,
+      transparent 44px
+    );
+  opacity: 0;
+  animation: glitchRects 1.8s steps(2, end) infinite;
+  mix-blend-mode: screen;
+}
+
+#glitch-grid::after {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 255, 106, 0.45) 0,
+      rgba(0, 255, 106, 0.45) 3px,
+      transparent 3px,
+      transparent 64px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 106, 0.3) 0,
+      rgba(0, 255, 106, 0.3) 3px,
+      transparent 3px,
+      transparent 56px
+    );
+  animation-duration: 2.6s;
+}
+
+#glitch-grid.is-active {
+  opacity: 1;
+}
+
+#glitch-grid.is-active::before,
+#glitch-grid.is-active::after {
+  opacity: 0.8;
 }
 
 #content {
@@ -1483,11 +1576,11 @@ h1 .title-role {
   }
 
   #hireme-rig {
-    top: 36%;
+    top: 40%;
   }
 
   #hireme-machine {
-    width: clamp(110px, 28vw, 180px);
+    width: clamp(90px, 22vw, 140px);
   }
 
   #hireme-rig .rig-flag {

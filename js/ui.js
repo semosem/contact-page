@@ -37,6 +37,9 @@ export const initUI = ({
     );
     dom.soundButton.classList.toggle("is-audio-on", playing);
     document.body.classList.toggle("hireme-active", playing);
+    if (playing) {
+      restartHireMeRig();
+    }
   };
 
   const startMatrixHum = () => {
@@ -230,6 +233,10 @@ export const initUI = ({
     }
     if (dom.sliderHud) {
       dom.sliderHud.style.setProperty("--hud-color", fillColor);
+    }
+
+    if (dom.glitchGrid) {
+      dom.glitchGrid.classList.toggle("is-active", value > 80);
     }
 
     const shouldPlay = value > 60;
@@ -563,6 +570,14 @@ export const initUI = ({
 
     const left = input.offsetLeft + textWidth;
     caret.style.left = `${left}px`;
+  }
+
+  function restartHireMeRig() {
+    const rig = document.getElementById("hireme-rig");
+    if (!rig) return;
+    rig.style.animation = "none";
+    rig.offsetHeight;
+    rig.style.animation = "";
   }
 
 };
