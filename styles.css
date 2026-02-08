@@ -1,3 +1,4 @@
+/* === Design Tokens === */
 :root {
   --matrix-green: #00ff6a;
   --matrix-bright: #b6ffd2;
@@ -16,6 +17,7 @@
     0 0 22px rgba(0, 255, 106, 0.85);
 }
 
+/* === Base === */
 body,
 html {
   margin: 0;
@@ -32,6 +34,7 @@ body {
   background: radial-gradient(ellipse at center, #003018 0%, #000 70%);
 }
 
+/* === Ambient Sweeps === */
 body::before {
   content: "";
   position: fixed;
@@ -112,6 +115,7 @@ body .sweep-yellow {
   mix-blend-mode: screen;
 }
 
+/* === Hire Me Rig === */
 #hireme-rig {
   position: fixed;
   left: 100%;
@@ -350,6 +354,7 @@ body.hireme-active #hireme-rig .rig-flag {
 }
 
 
+/* === Global Overlays === */
 #scanlines {
   position: fixed;
   top: 0;
@@ -475,6 +480,7 @@ body.hireme-active #hireme-rig .rig-flag {
   opacity: 0.8;
 }
 
+/* === Hero Content === */
 #content {
   position: relative;
   z-index: 2;
@@ -552,6 +558,7 @@ h1 .title-role {
   animation: ghostShift 6s ease-in-out infinite;
 }
 
+/* === Glitch & GIF Layer === */
 #gif-container {
   position: absolute;
   top: 0;
@@ -572,6 +579,7 @@ h1 .title-role {
   will-change: transform, opacity;
 }
 
+/* === Slider === */
 #slider-container {
   position: fixed;
   bottom: var(--slider-bottom);
@@ -746,6 +754,7 @@ h1 .title-role {
   animation: cursorBlink 2.4s steps(2, start) infinite;
 }
 
+/* === Skills === */
 #skills-container {
   position: fixed;
   top: 20px;
@@ -782,6 +791,7 @@ h1 .title-role {
     0 0 34px rgba(0, 255, 106, 0.9);
 }
 
+/* === Terminal === */
 #terminal {
   position: fixed;
   bottom: 20px;
@@ -897,6 +907,7 @@ h1 .title-role {
   height: 100%;
 }
 
+/* === Audio Button === */
 .control-container {
   position: fixed;
   bottom: 40px;
@@ -955,6 +966,7 @@ h1 .title-role {
   animation: glow 2s infinite, flicker 6s infinite;
 }
 
+/* === Animations === */
 @keyframes glow {
   0% {
     text-shadow: 0 0 5px #0f0;
@@ -1394,8 +1406,8 @@ h1 .title-role {
   :root {
     --slider-bottom: 26%;
     --mobile-side: 22px;
-    --mobile-top: 150px;
-    --mobile-bottom: 230px;
+    --mobile-top: 170px;
+    --mobile-bottom: 240px;
   }
 
   #content {
@@ -1405,7 +1417,7 @@ h1 .title-role {
       calc(var(--mobile-bottom) + env(safe-area-inset-bottom));
     align-items: flex-start;
     text-align: left;
-    gap: 16px;
+    gap: 20px;
     width: 100%;
     margin: 0;
   }
@@ -1464,7 +1476,7 @@ h1 .title-role {
     max-width: 640px;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 6px 0;
+    padding: 8px 0;
     border-radius: 0;
     background: none;
     border: none;
@@ -1577,7 +1589,7 @@ h1 .title-role {
   }
 
   #top-actions {
-    top: 32px;
+    top: 40px;
     right: 12px;
     gap: 8px;
   }
