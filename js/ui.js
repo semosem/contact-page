@@ -14,6 +14,7 @@ export const initUI = ({
     easedIntensity: 0,
     glitchStrength: 0.1,
     konamiIndex: 0,
+    userMuted: false,
   };
 
   const gifPool = [];
@@ -94,10 +95,13 @@ export const initUI = ({
     if (context.state === "running") {
       context.suspend().then(() => {
         state.isPlaying = false;
+        state.userMuted = true;
         setSoundButtonState(false);
       });
     } else {
-      resumeContext();
+      resumeContext().then(() => {
+        state.userMuted = false;
+      });
     }
   };
 
@@ -160,6 +164,14 @@ export const initUI = ({
     state.intensity = clamp(value / sliderMax, 0, 1);
     state.easedIntensity = Math.pow(state.intensity, 1.35);
 
+    if (audioContext) {
+      const running = audioContext.state === "running";
+      if (running !== state.isPlaying) {
+        state.isPlaying = running;
+        setSoundButtonState(running);
+      }
+    }
+
     const stepIndex = Math.floor(value / sliderStep);
     const index =
       value === sliderMax
@@ -218,6 +230,27 @@ export const initUI = ({
     }
     if (dom.sliderHud) {
       dom.sliderHud.style.setProperty("--hud-color", fillColor);
+    }
+
+    const shouldPlay = value > 60;
+    const shouldStop = value < 50;
+
+    if (shouldPlay && !state.userMuted) {
+      const context = startMatrixHum();
+      if (context && context.state !== "running") {
+        context.resume().then(() => {
+          state.isPlaying = true;
+          setSoundButtonState(true);
+        });
+      }
+    } else if (shouldStop) {
+      const context = startMatrixHum();
+      if (context && context.state === "running") {
+        context.suspend().then(() => {
+          state.isPlaying = false;
+          setSoundButtonState(false);
+        });
+      }
     }
 
     rootStyle.setProperty(
