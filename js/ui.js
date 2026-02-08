@@ -20,6 +20,10 @@ export const initUI = ({
   const sliderMax = Number(dom.slider.max) || settings.sliderMax;
   const sliderStep = settings.sliderStep;
   let audioContext = null;
+  let caret = null;
+  let measureCtx = null;
+  const inputLine = document.getElementById("terminal-input-line");
+  const terminal = document.getElementById("terminal");
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -403,6 +407,8 @@ export const initUI = ({
     );
 
     dom.terminalInput.value = "";
+    updateTerminalInputSize();
+    updateCaretPosition();
     dom.terminalOutput.scrollTop = dom.terminalOutput.scrollHeight;
   };
 
@@ -423,11 +429,29 @@ export const initUI = ({
     setSoundButtonState(state.isPlaying);
     bindSkillPills();
     updateContent();
+    updateTerminalInputSize();
+    setupCaret();
+    updateCaretPosition();
 
     dom.soundButton.title = "Toggle matrix hum";
     dom.soundButton.addEventListener("click", toggleSound);
     dom.slider.addEventListener("input", updateContent);
     dom.terminalInput.addEventListener("keydown", handleTerminalEnter);
+    dom.terminalInput.addEventListener("input", updateTerminalInputSize);
+    dom.terminalInput.addEventListener("input", updateCaretPosition);
+    dom.terminalInput.addEventListener("keyup", updateCaretPosition);
+    dom.terminalInput.addEventListener("click", updateCaretPosition);
+    dom.terminalInput.addEventListener("focus", updateCaretVisibility);
+    dom.terminalInput.addEventListener("blur", updateCaretVisibility);
+    if (terminal) {
+      terminal.addEventListener("click", (event) => {
+        if (event.target === dom.terminalInput) return;
+        dom.terminalInput.focus();
+        const length = dom.terminalInput.value.length;
+        dom.terminalInput.setSelectionRange(length, length);
+        updateCaretPosition();
+      });
+    }
     dom.cvIcon.addEventListener("click", toggleCvDropdown);
     dom.cvIcon.addEventListener("mouseover", () => {
       const icon = dom.cvIcon.querySelector("svg");
@@ -458,5 +482,48 @@ export const initUI = ({
     init,
     getGlitchStrength: () => state.glitchStrength,
   };
+
+  function updateTerminalInputSize() {
+    const length = dom.terminalInput.value.length;
+    dom.terminalInput.setAttribute("size", String(Math.max(1, length + 1)));
+  }
+
+  function setupCaret() {
+    if (!inputLine) return;
+    caret = document.getElementById("terminal-caret");
+    if (!caret) {
+      caret = document.createElement("span");
+      caret.id = "terminal-caret";
+      caret.setAttribute("aria-hidden", "true");
+      inputLine.appendChild(caret);
+    }
+
+    const canvas = document.createElement("canvas");
+    measureCtx = canvas.getContext("2d");
+  }
+
+  function updateCaretVisibility() {
+    if (!caret) return;
+    const isFocused = document.activeElement === dom.terminalInput;
+    caret.classList.toggle("is-hidden", !isFocused);
+    if (isFocused) {
+      updateCaretPosition();
+    }
+  }
+
+  function updateCaretPosition() {
+    if (!caret || !measureCtx || !dom.terminalInput) return;
+
+    const input = dom.terminalInput;
+    const style = getComputedStyle(input);
+    measureCtx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+
+    const cursorIndex = input.selectionStart || 0;
+    const textBefore = input.value.slice(0, cursorIndex);
+    const textWidth = measureCtx.measureText(textBefore).width;
+
+    const left = input.offsetLeft + textWidth;
+    caret.style.left = `${left}px`;
+  }
 
 };
