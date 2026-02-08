@@ -13,6 +13,7 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     brightness: 0.6,
     shadowBlur: 0,
     extraChance: 0,
+    density: 1,
   };
 
   let intervalId = null;
@@ -36,6 +37,7 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     brightness,
     shadowBlur,
     extraChance,
+    density,
   }) => {
     state.easedIntensity = easedIntensity;
     state.rainSpeed = rainSpeed;
@@ -43,6 +45,7 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     if (typeof brightness === "number") state.brightness = brightness;
     if (typeof shadowBlur === "number") state.shadowBlur = shadowBlur;
     if (typeof extraChance === "number") state.extraChance = extraChance;
+    if (typeof density === "number") state.density = density;
   };
 
   const draw = () => {
@@ -55,6 +58,9 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     ctx.shadowBlur = state.shadowBlur;
 
     for (let i = 0; i < state.drops.length; i += 1) {
+      if (state.density < 1 && Math.random() > state.density) {
+        continue;
+      }
       const text = chars.charAt(Math.floor(Math.random() * chars.length));
       ctx.fillText(text, i * settings.matrixFontSize, state.drops[i] * settings.matrixFontSize);
 

@@ -34,6 +34,7 @@ export const initUI = ({
       "aria-label",
       playing ? "Mute matrix hum" : "Play matrix hum"
     );
+    dom.soundButton.classList.toggle("is-audio-on", playing);
   };
 
   const startMatrixHum = () => {
@@ -83,16 +84,19 @@ export const initUI = ({
     const context = startMatrixHum();
     if (!context) return;
 
+    const resumeContext = () =>
+      context.resume().then(() => {
+        state.isPlaying = true;
+        setSoundButtonState(true);
+      });
+
     if (context.state === "running") {
       context.suspend().then(() => {
         state.isPlaying = false;
         setSoundButtonState(false);
       });
     } else {
-      context.resume().then(() => {
-        state.isPlaying = true;
-        setSoundButtonState(true);
-      });
+      resumeContext();
     }
   };
 
@@ -232,6 +236,7 @@ export const initUI = ({
       brightness: 0.35 + state.easedIntensity * 0.65,
       shadowBlur: 2 + state.easedIntensity * 8,
       extraChance: 0.05 + state.easedIntensity * 0.35,
+      density: clamp(0.35 + state.easedIntensity * 0.65, 0.35, 1),
     });
 
     state.glitchStrength = 0.08 + state.easedIntensity * 0.25;
