@@ -11,7 +11,10 @@ export const MATRIX_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export const RESUME_CONTENT = [
   "Lets turn ideas into reliable software with clean and maintainable code.",
-  "Comfortable across React, Vue, Node, and Angular in real production work.",
+  "I can advise your company about performance and creative user interactions",
+  "Scalable frontend architecture and maintainability upgrades are my specialty.",
+  "Premium interaction design without the performance heat",
+  "Across React, TypeScript, JS, Vue, Node, and Angular",
   "Known for precise git history and disciplined, low-noise collaboration.",
   "I hunt bugs fast and fix root causes, not just symptoms.",
   "I sweat performance: render paths, component design, and UX latency.",
