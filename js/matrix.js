@@ -14,20 +14,57 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     shadowBlur: 0,
     extraChance: 0,
     density: 1,
+    renderWidth: window.innerWidth,
+    renderHeight: window.innerHeight,
+    fontSize: settings.matrixFontSize,
+    scale: settings.matrixScale || 1,
   };
 
   let intervalId = null;
+  let isRunning = false;
+  let isVisible = document.visibilityState === "visible";
+
+  const clearInterval = () => {
+    if (intervalId) {
+      window.clearInterval(intervalId);
+      intervalId = null;
+    }
+  };
+
+  const startInterval = () => {
+    if (intervalId) return;
+    intervalId = window.setInterval(draw, settings.rainInterval);
+  };
 
   const resize = () => {
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
+    const scale = typeof settings.matrixScale === "number" ? settings.matrixScale : 1;
+    const renderWidth = window.innerWidth * scale;
+    const renderHeight = window.innerHeight * scale;
+    const fontSize = settings.matrixFontSize * scale;
+
+    canvas.width = renderWidth * dpr;
+    canvas.height = renderHeight * dpr;
     canvas.style.width = `${window.innerWidth}px`;
     canvas.style.height = `${window.innerHeight}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const columns = Math.floor(window.innerWidth / settings.matrixFontSize);
+    const columns = Math.max(1, Math.floor(renderWidth / fontSize));
     state.drops = Array(columns).fill(1);
+    state.renderWidth = renderWidth;
+    state.renderHeight = renderHeight;
+    state.fontSize = fontSize;
+    state.scale = scale;
+  };
+
+  const handleVisibility = () => {
+    isVisible = document.visibilityState === "visible";
+    if (!isRunning || prefersReducedMotion) return;
+    if (isVisible) {
+      startInterval();
+    } else {
+      clearInterval();
+    }
   };
 
   const setIntensity = ({
@@ -50,10 +87,10 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
 
   const draw = () => {
     ctx.fillStyle = `rgba(0, 0, 0, ${state.trailAlpha})`;
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.fillRect(0, 0, state.renderWidth, state.renderHeight);
 
     ctx.fillStyle = `rgba(0, 255, 106, ${state.brightness})`;
-    ctx.font = `${settings.matrixFontSize}px "Share Tech Mono", monospace`;
+    ctx.font = `${state.fontSize}px "Share Tech Mono", monospace`;
     ctx.shadowColor = "rgba(0, 255, 106, 0.75)";
     ctx.shadowBlur = state.shadowBlur;
 
@@ -62,20 +99,20 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
         continue;
       }
       const text = chars.charAt(Math.floor(Math.random() * chars.length));
-      ctx.fillText(text, i * settings.matrixFontSize, state.drops[i] * settings.matrixFontSize);
+      ctx.fillText(text, i * state.fontSize, state.drops[i] * state.fontSize);
 
       if (state.extraChance > 0 && Math.random() < state.extraChance) {
         const extraText = chars.charAt(Math.floor(Math.random() * chars.length));
-        const offset = Math.random() * settings.matrixFontSize * 6;
+        const offset = Math.random() * state.fontSize * 6;
         ctx.fillText(
           extraText,
-          i * settings.matrixFontSize,
-          state.drops[i] * settings.matrixFontSize - offset
+          i * state.fontSize,
+          state.drops[i] * state.fontSize - offset
         );
       }
 
       if (
-        state.drops[i] * settings.matrixFontSize > window.innerHeight &&
+        state.drops[i] * state.fontSize > state.renderHeight &&
         Math.random() > 0.985 - state.easedIntensity * 0.02
       ) {
         state.drops[i] = 0;
@@ -90,17 +127,21 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     resize();
     draw();
     window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     if (!prefersReducedMotion) {
-      intervalId = window.setInterval(draw, settings.rainInterval);
+      isRunning = true;
+      if (isVisible) {
+        startInterval();
+      }
     }
   };
 
   const stop = () => {
-    if (intervalId) {
-      window.clearInterval(intervalId);
-      intervalId = null;
-    }
+    clearInterval();
+    isRunning = false;
+    document.removeEventListener("visibilitychange", handleVisibility);
+    window.removeEventListener("resize", resize);
   };
 
   const setOpacity = (value) => {

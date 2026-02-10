@@ -3,7 +3,8 @@ export const SETTINGS = {
   sliderStep: 10,
   maxGifs: 18,
   matrixFontSize: 12,
-  rainInterval: 33,
+  matrixScale: 0.75,
+  rainInterval: 45,
   glitchInterval: 3000,
 };
 

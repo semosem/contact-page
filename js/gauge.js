@@ -92,5 +92,5 @@
 
   resize();
   window.addEventListener("resize", resize);
-  setInterval(update, 800);
+  setInterval(update, 1500);
 })();

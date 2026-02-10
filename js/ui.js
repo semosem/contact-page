@@ -44,6 +44,10 @@ export const initUI = ({
     loadScore: 0,
     renderActive: true,
   };
+  const idleConfig = {
+    timeoutMs: 8000,
+    isIdle: false,
+  };
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -185,7 +189,16 @@ export const initUI = ({
     const value = Number(dom.slider.value);
     state.intensity = clamp(value / sliderMax, 0, 1);
     state.easedIntensity = Math.pow(state.intensity, 1.35);
+    const isHard = value >= 70;
+    const isFirm = value >= 30 && value < 70;
+    const isSoft = value < 30;
+    const tierLabel = isHard ? "HARD" : isFirm ? "FIRM" : "SOFT";
+    document.body.dataset.tier = tierLabel.toLowerCase();
     perfState.lastInteraction = performance.now();
+    if (idleConfig.isIdle) {
+      idleConfig.isIdle = false;
+      document.body.classList.remove("is-idle");
+    }
 
     if (audioContext) {
       const running = audioContext.state === "running";
@@ -229,38 +242,35 @@ export const initUI = ({
     dom.resume.style.filter = `drop-shadow(0 0 ${
       6 + state.easedIntensity * 12
     }px rgba(0, 255, 106, ${0.3 + state.easedIntensity * 0.4}))`;
-    dom.resume.style.textTransform = value > 80 ? "uppercase" : "none";
+    dom.resume.style.textTransform = isHard ? "uppercase" : "none";
 
-    setBodyShake(value > 45 && !prefersReducedMotion);
+    setBodyShake(isHard && !prefersReducedMotion);
 
-    const shouldRotate = value > 55 && !prefersReducedMotion;
+    const shouldRotate = isHard && !prefersReducedMotion;
     dom.resume.classList.toggle("rotate", shouldRotate);
     dom.resume.style.animationDuration = shouldRotate
       ? `${clamp(140 - state.easedIntensity * 80, 40, 140)}s`
       : "";
 
-    const fillColor =
-      value > 75 ? "#ff4d4d" : value > 55 ? "#ffe066" : "#00ff6a";
+    const fillColor = isHard ? "#ff4d4d" : isFirm ? "#ffe066" : "#00ff6a";
     dom.slider.style.background = `linear-gradient(90deg, ${fillColor} 0%, ${fillColor} ${value}%, rgba(0, 255, 106, 0.45) ${value}%, rgba(0, 255, 106, 0.45) 100%)`;
 
     if (dom.sliderSignal) {
       dom.sliderSignal.textContent = `${Math.round(state.intensity * 100)}%`;
     }
     if (dom.sliderMode) {
-      const mode =
-        value > 75 ? "HARD" : value > 40 ? "FIRM" : "SOFT";
-      dom.sliderMode.textContent = mode;
+      dom.sliderMode.textContent = tierLabel;
     }
     if (dom.sliderHud) {
       dom.sliderHud.style.setProperty("--hud-color", fillColor);
     }
 
     if (dom.glitchGrid) {
-      dom.glitchGrid.classList.toggle("is-active", value > 80);
+      dom.glitchGrid.classList.toggle("is-active", isHard);
     }
 
-    const shouldPlay = value > 60;
-    const shouldStop = value < 50;
+    const shouldPlay = value >= 70;
+    const shouldStop = value <= 60;
 
     if (shouldPlay && !state.userMuted) {
       const context = startMatrixHum();
@@ -410,6 +420,11 @@ export const initUI = ({
       interactionMs: now - perfState.lastInteraction,
       renderActive: perfState.renderActive,
     };
+
+    if (!idleConfig.isIdle && now - perfState.lastInteraction > idleConfig.timeoutMs) {
+      idleConfig.isIdle = true;
+      document.body.classList.add("is-idle");
+    }
     requestAnimationFrame(updatePerfLoop);
   };
 

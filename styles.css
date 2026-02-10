@@ -71,6 +71,60 @@ body::after {
   mix-blend-mode: screen;
 }
 
+body.is-idle::before,
+body.is-idle::after,
+body.is-idle .sweep-yellow {
+  opacity: 0.2;
+}
+
+body.is-idle h1,
+body.is-idle #resume {
+  text-shadow: 0 0 8px rgba(0, 255, 106, 0.25) !important;
+  filter: none !important;
+}
+
+body.is-idle #slider,
+body.is-idle #slider::-webkit-slider-thumb,
+body.is-idle #slider::-moz-range-thumb {
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.25) !important;
+}
+
+body.is-idle #performance-layer {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.25)) !important;
+  opacity: 0.6 !important;
+}
+
+/* === Slider Tiers (Soft / Firm / Hard) === */
+body[data-tier="soft"] #content h1 {
+  text-shadow: 0 0 12px rgba(0, 255, 106, 0.35);
+}
+
+body[data-tier="firm"] #content h1 {
+  text-shadow: 0 0 18px rgba(0, 255, 136, 0.55);
+}
+
+body[data-tier="hard"] #content h1 {
+  text-shadow: 0 0 26px rgba(0, 255, 136, 0.8),
+    0 0 40px rgba(0, 255, 106, 0.55);
+}
+
+body[data-tier="soft"] #gif-container {
+  opacity: 0.4;
+}
+
+body[data-tier="firm"] #gif-container {
+  opacity: 0.7;
+}
+
+body[data-tier="hard"] #gif-container {
+  opacity: 1;
+}
+
+body[data-tier="hard"] #performance-layer {
+  filter: drop-shadow(0 0 22px rgba(0, 255, 136, 0.85))
+    drop-shadow(0 0 36px rgba(0, 255, 136, 0.55));
+}
+
 body.perf-mobile::before {
   opacity: 0.45;
 }
