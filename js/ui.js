@@ -18,6 +18,7 @@ export const initUI = ({
   };
 
   const gifPool = [];
+  let lastGifShuffle = 0;
   const sliderMax = Number(dom.slider.max) || settings.sliderMax;
   const sliderStep = settings.sliderStep;
   let audioContext = null;
@@ -154,6 +155,13 @@ export const initUI = ({
   };
 
   const updateGifs = () => {
+    if (state.intensity < 0.6) {
+      gifPool.forEach((gif) => {
+        gif.style.opacity = "0";
+      });
+      return;
+    }
+
     ensureGifPool();
 
     const targetCount = Math.round(
@@ -165,13 +173,20 @@ export const initUI = ({
       if (index < targetCount) {
         gif.style.opacity = String(opacity);
         gif.style.transform = `scale(${0.85 + state.easedIntensity * 0.4})`;
-        if (state.intensity > 0.7 && Math.random() < 0.12) {
-          randomizeGif(gif);
-        }
       } else {
         gif.style.opacity = "0";
       }
     });
+
+    if (state.intensity > 0.7 && targetCount > 0) {
+      const now = performance.now();
+      if (now - lastGifShuffle > 2500) {
+        const pick = Math.floor(Math.random() * targetCount);
+        const gif = gifPool[pick];
+        if (gif) randomizeGif(gif);
+        lastGifShuffle = now;
+      }
+    }
   };
 
   const randomizeGif = (gif, initial = false) => {

@@ -748,6 +748,12 @@ h1 .title-role {
   will-change: transform, opacity;
 }
 
+body.is-idle .gif {
+  opacity: 0.2 !important;
+  mix-blend-mode: normal;
+  filter: saturate(1);
+}
+
 /* === Slider === */
 #slider-container {
   position: fixed;
