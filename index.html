@@ -20,11 +20,38 @@
     <div id="background"></div>
     <div id="glitch-grid" aria-hidden="true"></div>
     <div id="content">
-      <h1 class="glow">
-        <span class="title-name">Sem Gebresilassie:</span>
-        <span class="title-role">Software developer</span>
-      </h1>
-      <div id="resume"></div>
+      <div id="hero-stack">
+        <section id="performance-layer" aria-label="Performance layer">
+          <div class="perf-metrics">
+            <div class="perf-metric" data-perf="fps">
+              <span class="perf-label">FPS</span>
+              <span class="perf-value">--</span>
+            </div>
+            <div class="perf-metric" data-perf="quality">
+              <span class="perf-label">Quality</span>
+              <span class="perf-value">Auto</span>
+            </div>
+            <div class="perf-metric" data-perf="render">
+              <span class="perf-label">Render</span>
+              <span class="perf-value">Active</span>
+            </div>
+            <div class="perf-metric" data-perf="interaction">
+              <span class="perf-label">Interaction</span>
+              <span class="perf-value">Idle</span>
+            </div>
+            <div class="perf-metric" data-perf="latency">
+              <span class="perf-label">Latency</span>
+              <span class="perf-value">Low</span>
+            </div>
+          </div>
+          <div id="perf-gauge" aria-hidden="true"></div>
+        </section>
+        <h1 class="glow">
+          <span class="title-name">Sem Gebresilassie:</span>
+          <span class="title-role">Software developer</span>
+        </h1>
+        <div id="resume"></div>
+      </div>
     </div>
     <div id="gif-container"></div>
     <div id="slider-container">
@@ -141,5 +168,6 @@
     </div>
 
     <script type="module" src="./js/main.js"></script>
+    <script src="./js/gauge.js" defer></script>
   </body>
 </html>

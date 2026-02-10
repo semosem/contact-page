@@ -25,6 +25,25 @@ export const initUI = ({
   let measureCtx = null;
   const inputLine = document.getElementById("terminal-input-line");
   const terminal = document.getElementById("terminal");
+  const perfElements = {
+    fps: document.querySelector('[data-perf="fps"] .perf-value'),
+    quality: document.querySelector('[data-perf="quality"] .perf-value'),
+    render: document.querySelector('[data-perf="render"] .perf-value'),
+    interaction: document.querySelector('[data-perf="interaction"] .perf-value'),
+    latency: document.querySelector('[data-perf="latency"] .perf-value'),
+  };
+  const perfState = {
+    lastFrame: 0,
+    frameCount: 0,
+    lastFpsUpdate: 0,
+    lastLatencyUpdate: 0,
+    lastInteraction: 0,
+    latencySamples: [],
+    latestFps: 0,
+    latestLatencyMs: 0,
+    loadScore: 0,
+    renderActive: true,
+  };
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -166,6 +185,7 @@ export const initUI = ({
     const value = Number(dom.slider.value);
     state.intensity = clamp(value / sliderMax, 0, 1);
     state.easedIntensity = Math.pow(state.intensity, 1.35);
+    perfState.lastInteraction = performance.now();
 
     if (audioContext) {
       const running = audioContext.state === "running";
@@ -265,6 +285,11 @@ export const initUI = ({
       String(0.12 + state.easedIntensity * 0.28)
     );
     rootStyle.setProperty(
+      "--perf-scale",
+      String(1 + state.easedIntensity * 0.22)
+    );
+    rootStyle.setProperty("--perf-boost", String(state.easedIntensity));
+    rootStyle.setProperty(
       "--matrix-opacity",
       String(0.45 + state.easedIntensity * 0.45)
     );
@@ -299,6 +324,93 @@ export const initUI = ({
       dom.resume.style.textShadow = "";
       dom.resume.style.filter = "";
     }
+  };
+
+  const getQualityMode = () => {
+    if (prefersReducedMotion) return "LOW";
+    const memory = navigator.deviceMemory || 4;
+    const cores = navigator.hardwareConcurrency || 4;
+    if (memory >= 8 && cores >= 8) return "HIGH";
+    if (memory >= 4 && cores >= 4) return "MED";
+    return "LOW";
+  };
+
+  const updateRenderState = () => {
+    if (!perfElements.render) return;
+    const isVisible = document.visibilityState === "visible";
+    perfElements.render.textContent = isVisible ? "ACTIVE" : "PAUSED";
+    perfState.renderActive = isVisible;
+  };
+
+  const updateInteractionState = (now) => {
+    if (!perfElements.interaction) return;
+    const engaged = now - perfState.lastInteraction < 2000;
+    perfElements.interaction.textContent = engaged ? "ENGAGED" : "IDLE";
+  };
+
+  const updateQualityState = () => {
+    if (!perfElements.quality) return;
+    perfElements.quality.textContent = `AUTO ${getQualityMode()}`;
+  };
+
+  const updateLatencyState = () => {
+    if (!perfElements.latency) return;
+    if (!perfState.latencySamples.length) return;
+    const avg =
+      perfState.latencySamples.reduce((sum, val) => sum + val, 0) /
+      perfState.latencySamples.length;
+    perfState.latencySamples = [];
+    perfState.latestLatencyMs = avg;
+    perfState.loadScore = clamp(((avg - 8) / 24) * 100, 0, 100);
+    const label = avg < 18 ? "LOW" : avg < 28 ? "MOD" : "HIGH";
+    perfElements.latency.textContent = label;
+  };
+
+  const updatePerfLoop = (now) => {
+    if (!perfElements.fps && !perfElements.latency && !perfElements.render) {
+      return;
+    }
+
+    if (!perfState.lastFrame) {
+      perfState.lastFrame = now;
+      perfState.lastFpsUpdate = now;
+      perfState.lastLatencyUpdate = now;
+      perfState.lastInteraction = now;
+    }
+
+    perfState.frameCount += 1;
+    const delta = now - perfState.lastFrame;
+    perfState.lastFrame = now;
+
+    if (delta > 0 && delta < 120) {
+      perfState.latencySamples.push(delta);
+    }
+
+    if (now - perfState.lastFpsUpdate >= 1000) {
+      const fps = Math.round(
+        (perfState.frameCount * 1000) / (now - perfState.lastFpsUpdate)
+      );
+      if (perfElements.fps) perfElements.fps.textContent = `${fps}`;
+      perfState.latestFps = fps;
+      perfState.frameCount = 0;
+      perfState.lastFpsUpdate = now;
+    }
+
+    if (now - perfState.lastLatencyUpdate >= 1000) {
+      updateLatencyState();
+      perfState.lastLatencyUpdate = now;
+    }
+
+    updateInteractionState(now);
+    const frameMs = perfState.latestLatencyMs || delta;
+    window.__perfMetrics = {
+      fps: perfState.latestFps,
+      frameMs,
+      loadScore: perfState.loadScore,
+      interactionMs: now - perfState.lastInteraction,
+      renderActive: perfState.renderActive,
+    };
+    requestAnimationFrame(updatePerfLoop);
   };
 
   const toggleCvDropdown = () => {
@@ -475,6 +587,9 @@ export const initUI = ({
     setSoundButtonState(state.isPlaying);
     bindSkillPills();
     updateContent();
+    updateQualityState();
+    updateRenderState();
+    requestAnimationFrame(updatePerfLoop);
     updateTerminalInputSize();
     setupCaret();
     updateCaretPosition();
@@ -512,6 +627,7 @@ export const initUI = ({
     });
 
     document.addEventListener("keydown", handleKeydown);
+    document.addEventListener("visibilitychange", updateRenderState);
     document.addEventListener("click", (event) => {
       if (!dom.cvIcon.contains(event.target) && !dom.cvDropdown.contains(event.target)) {
         dom.cvDropdown.classList.remove("active");
