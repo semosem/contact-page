@@ -1,16 +1,14 @@
-(() => {
-  const target = document.getElementById("perf-gauge");
-  if (!target) return;
-  target.replaceChildren();
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+export const initGauge = ({ container, getMetrics, interval = 1500 }) => {
+  if (!container) return null;
+  container.replaceChildren();
   const canvas = document.createElement("canvas");
   canvas.className = "perf-gauge-canvas";
-  target.appendChild(canvas);
+  container.appendChild(canvas);
 
   const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-
-  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-  const getMetrics = () => window.__perfMetrics || {};
+  if (!ctx) return null;
 
   const drawArc = (cx, cy, radius, value) => {
     const start = Math.PI;
@@ -48,7 +46,8 @@
     const width = canvas.width / dpr;
     const height = canvas.height / dpr;
     ctx.clearRect(0, 0, width, height);
-    const metrics = getMetrics();
+
+    const metrics = typeof getMetrics === "function" ? getMetrics() : {};
     const fpsValue = clamp(metrics.fps || 0, 0, 100);
     const frameMs = metrics.frameMs || 16;
     const frameValue = clamp(frameMs * 2, 0, 100);
@@ -75,7 +74,7 @@
   };
 
   const resize = () => {
-    const width = Math.max(220, target.clientWidth);
+    const width = Math.max(220, container.clientWidth);
     const height = Math.round(width * 0.34);
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(width * dpr);
@@ -86,11 +85,12 @@
     draw();
   };
 
-  const update = () => {
-    draw();
-  };
-
   resize();
   window.addEventListener("resize", resize);
-  setInterval(update, 1500);
-})();
+  const timer = setInterval(draw, interval);
+
+  return () => {
+    window.removeEventListener("resize", resize);
+    clearInterval(timer);
+  };
+};
