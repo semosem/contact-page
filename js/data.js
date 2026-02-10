@@ -1,7 +1,7 @@
 export const SETTINGS = {
   sliderMax: 100,
   sliderStep: 10,
-  maxGifs: 18,
+  maxGifs: 9,
   matrixFontSize: 12,
   matrixScale: 0.75,
   rainInterval: 45,
