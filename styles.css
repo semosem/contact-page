@@ -1602,6 +1602,9 @@ body.hireme-active #hireme-rig .rig-flag {
   #terminal {
     border-color: transparent;
     box-shadow: none;
+    bottom: calc(var(--slider-bottom) + 18px);
+    width: 360px;
+    height: 230px;
   }
 }
 @media (max-width: 900px), (max-height: 700px) {
