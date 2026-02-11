@@ -1,4 +1,4 @@
-import { SETTINGS, RESUME_CONTENT, KONAMI_CODE, MATRIX_CHARS } from "./data.js";
+import { SETTINGS, RESUME_CONTENT, GIFS, KONAMI_CODE, MATRIX_CHARS } from "./data.js";
 import { createSliderController } from "./modules/slider.js";
 import { createContentController } from "./modules/content.js";
 import { createMatrixAudio } from "./modules/audio.js";
@@ -70,7 +70,7 @@ if (missing.length) {
   const audio = createMatrixAudio({ button: dom.soundButton });
 
   let matrix = null;
-  let ambient = null;
+  let gifs = null;
   let perf = null;
   let terminal = null;
   let cv = null;
@@ -83,7 +83,7 @@ if (missing.length) {
     if (perf) perf.recordInteraction();
     audio.syncWithContext();
     audio.updateAuto(value, userInitiated);
-    if (ambient) ambient.update(state);
+    if (gifs) gifs.update(state);
     applyMatrixIntensity(state.easedIntensity);
   };
 
@@ -131,7 +131,7 @@ if (missing.length) {
   handleSliderChange(Number(dom.slider.value), false);
 
   const loadEnhancements = async () => {
-    const [{ createMatrixRain, startTitleGlitch }, { createAmbientLayer }] =
+    const [{ createMatrixRain, startTitleGlitch }, { createGifLayer }] =
       await Promise.all([
         import("./matrix.js"),
         import("./modules/gifs.js"),
@@ -173,11 +173,12 @@ if (missing.length) {
       getStrength: content.getGlitchStrength,
     });
 
-    ambient = createAmbientLayer({
+    gifs = createGifLayer({
       container: dom.gifContainer,
-      maxShards: Math.min(6, tunedSettings.maxGifs),
+      gifs: GIFS,
+      maxGifs: tunedSettings.maxGifs,
     });
-    if (ambient) ambient.update(lastState);
+    if (gifs) gifs.update(lastState);
 
     perf = perfModule.createPerfMonitor({ prefersReducedMotion });
     perf.start();

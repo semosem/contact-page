@@ -24,6 +24,19 @@ export const RESUME_CONTENT = [
   "I can advise your company about performance and creative user interactions",
 ];
 
+export const GIFS = [
+  "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif",
+  "https://media.giphy.com/media/ukMiDlCmdv2og/giphy.gif",
+  "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+  "https://media.giphy.com/media/l3q2zbskZp2j8wniE/giphy.gif",
+  "https://media.giphy.com/media/BmmfETghGOPrW/giphy.gif",
+  "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif",
+  "https://media.giphy.com/media/3o7btNa0RUYa5E7iiQ/giphy.gif",
+  "https://media.giphy.com/media/WFZvB7VIXBgiz3oDXE/giphy.gif",
+  "https://media.giphy.com/media/3ornk57KwDXf81rjWM/giphy.gif",
+  "https://media.giphy.com/media/3o7qE1YN7aBOFPRw8E/giphy.gif",
+];
+
 export const KONAMI_CODE = [
   "ArrowUp",
   "ArrowUp",
