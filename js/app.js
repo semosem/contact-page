@@ -240,7 +240,12 @@ if (missing.length) {
     });
     if (gifs) gifs.update(lastState);
 
-    perf = perfModule.createPerfMonitor({ prefersReducedMotion });
+    perf = perfModule.createPerfMonitor({
+      prefersReducedMotion,
+      onIdleChange: (idle) => {
+        if (matrix?.setPaused) matrix.setPaused(idle);
+      },
+    });
     perf.start();
     perf.recordInteraction();
 

@@ -23,6 +23,7 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
   let intervalId = null;
   let isRunning = false;
   let isVisible = document.visibilityState === "visible";
+  let isIdlePaused = false;
 
   const clearInterval = () => {
     if (intervalId) {
@@ -34,6 +35,17 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
   const startInterval = () => {
     if (intervalId) return;
     intervalId = window.setInterval(draw, settings.rainInterval);
+  };
+
+  const shouldRunInterval = () =>
+    isRunning && isVisible && !prefersReducedMotion && !isIdlePaused;
+
+  const syncInterval = () => {
+    if (shouldRunInterval()) {
+      startInterval();
+    } else {
+      clearInterval();
+    }
   };
 
   const resize = () => {
@@ -59,12 +71,7 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
 
   const handleVisibility = () => {
     isVisible = document.visibilityState === "visible";
-    if (!isRunning || prefersReducedMotion) return;
-    if (isVisible) {
-      startInterval();
-    } else {
-      clearInterval();
-    }
+    syncInterval();
   };
 
   const setIntensity = ({
@@ -129,12 +136,8 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     window.addEventListener("resize", resize);
     document.addEventListener("visibilitychange", handleVisibility);
 
-    if (!prefersReducedMotion) {
-      isRunning = true;
-      if (isVisible) {
-        startInterval();
-      }
-    }
+    isRunning = true;
+    syncInterval();
   };
 
   const stop = () => {
@@ -148,6 +151,14 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     canvas.style.opacity = String(value);
   };
 
+  const setPaused = (paused) => {
+    isIdlePaused = Boolean(paused);
+    syncInterval();
+    if (!isIdlePaused && shouldRunInterval()) {
+      draw();
+    }
+  };
+
   return {
     start,
     stop,
@@ -155,6 +166,7 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
     draw,
     setIntensity,
     setOpacity,
+    setPaused,
   };
 };
 
