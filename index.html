@@ -27,7 +27,7 @@
         });
       }
     </script>
-    <link rel="stylesheet" href="./styles.css" title="styles" />
+    <link rel="stylesheet" href="./styles.min.css" title="styles" />
   </head>
   <body>
     <div id="scanlines"></div>
@@ -175,19 +175,28 @@
     </div>
     <div id="hireme-rig" aria-hidden="true">
       <div class="rig-body">
-        <img
-          id="hireme-machine"
-          src="./assets/matrix-machine.png"
-          srcset="
-            ./assets/matrix-machine.png 200w,
-            ./assets/matrix-machine@2x.png 400w
-          "
-          sizes="(max-width: 900px) 140px, 200px"
-          width="200"
-          height="200"
-          alt=""
-          loading="lazy"
-          decoding="async" />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="
+              ./assets/matrix-machine.webp 200w,
+              ./assets/matrix-machine@2x.webp 400w
+            "
+            sizes="(max-width: 900px) 140px, 200px" />
+          <img
+            id="hireme-machine"
+            src="./assets/matrix-machine.png"
+            srcset="
+              ./assets/matrix-machine.png 200w,
+              ./assets/matrix-machine@2x.png 400w
+            "
+            sizes="(max-width: 900px) 140px, 200px"
+            width="200"
+            height="200"
+            alt=""
+            loading="lazy"
+            decoding="async" />
+        </picture>
         <a
           class="rig-flag"
           href="https://www.linkedin.com/in/semgebresilassie/"
