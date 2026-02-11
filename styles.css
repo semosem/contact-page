@@ -234,7 +234,8 @@ body.hireme-active #hireme-rig {
 }
 
 #hireme-machine {
-  width: clamp(120px, 16vw, 200px);
+  width: 200px;
+  max-width: 200px;
   height: auto;
   filter: drop-shadow(0 0 12px rgba(0, 255, 106, 0.35))
     drop-shadow(0 0 20px rgba(0, 255, 140, 0.25));
@@ -1808,7 +1809,8 @@ body.is-idle .gif {
   }
 
   #hireme-machine {
-    width: clamp(90px, 22vw, 140px);
+    width: 140px;
+    max-width: 140px;
   }
 
   #hireme-rig .rig-flag {
