@@ -8,23 +8,26 @@
     <meta
       name="description"
       content="Sem Gebresilassie — software developer focused on modern web apps, performance, and creative interaction design." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Share+Tech+Mono&display=swap" />
+      href="./assets/fonts/Anton-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Share+Tech+Mono&display=swap"
-      media="print"
-      onload="this.media='all'" />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Anton&family=Share+Tech+Mono&display=swap" />
-    </noscript>
-    <link rel="stylesheet" href="./styles.min.css" title="styles" />
+      rel="preload"
+      href="./assets/fonts/ShareTechMono-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin />
+    <script>
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          document.documentElement.classList.add("fonts-ready");
+        });
+      }
+    </script>
+    <link rel="stylesheet" href="./styles.css" title="styles" />
   </head>
   <body>
     <div class="sweep-yellow" aria-hidden="true"></div>
@@ -67,7 +70,8 @@
         <div
           id="resume"
           data-text="Lets turn ideas into reliable software with clean and maintainable code.">
-          Lets turn ideas into reliable software with clean and maintainable code.
+          Lets turn ideas into reliable software with clean and maintainable
+          code.
         </div>
       </div>
     </div>
@@ -104,14 +108,24 @@
           href="https://www.linkedin.com/in/semgebresilassie/"
           target="_blank"
           rel="noreferrer">
-          <img src="./assets/blue.png" alt="LinkedIn" loading="lazy" decoding="async" />
+          <img
+            src="./assets/blue.png"
+            alt="LinkedIn"
+            width="96"
+            height="64"
+            decoding="async" />
         </a>
         <a
           id="github-link"
           href="https://github.com/semosem?tab=repositories"
           target="_blank"
           rel="noreferrer">
-          <img src="./assets/red.png" alt="GitHub" loading="lazy" decoding="async" />
+          <img
+            src="./assets/red.png"
+            alt="GitHub"
+            width="96"
+            height="64"
+            decoding="async" />
         </a>
       </div>
       <div id="cv-icon">
@@ -133,19 +147,18 @@
       </ul>
     </div>
 
-      <div id="skills-container">
-        <div class="skill-pill">JavaScript</div>
-        <div class="skill-pill">TypeScript</div>
-        <div class="skill-pill">React</div>
-        <div class="skill-pill">NextJs</div>
-        <div class="skill-pill">Node.js</div>
-        <div class="skill-pill">Angular</div>
-        <div class="skill-pill">HTML5</div>
-        <div class="skill-pill">CSS3</div>
-        <div class="skill-pill">Git</div>
-        <div class="skill-pill">RESTful APIs</div>
-      </div>
-
+    <div id="skills-container">
+      <div class="skill-pill">JavaScript</div>
+      <div class="skill-pill">TypeScript</div>
+      <div class="skill-pill">React</div>
+      <div class="skill-pill">NextJs</div>
+      <div class="skill-pill">Node.js</div>
+      <div class="skill-pill">Angular</div>
+      <div class="skill-pill">HTML5</div>
+      <div class="skill-pill">CSS3</div>
+      <div class="skill-pill">Git</div>
+      <div class="skill-pill">RESTful APIs</div>
+    </div>
 
     <div id="terminal">
       <div id="terminal-hover-header" aria-hidden="true">Terminal</div>
@@ -153,7 +166,7 @@
         <div id="terminal-output" aria-live="polite"></div>
         <div id="terminal-input-line">
           <span class="prompt">$ </span>
-          <input type="text" id="terminal-input" />
+          <input type="text" id="terminal-input" aria-label="Terminal input" />
         </div>
       </div>
     </div>
@@ -166,6 +179,13 @@
         <img
           id="hireme-machine"
           src="./assets/matrix-machine.png"
+          srcset="
+            ./assets/matrix-machine.png 200w,
+            ./assets/matrix-machine@2x.png 400w
+          "
+          sizes="(max-width: 900px) 140px, 200px"
+          width="200"
+          height="200"
           alt=""
           loading="lazy"
           decoding="async" />
