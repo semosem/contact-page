@@ -1,6 +1,10 @@
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-export const createPerfMonitor = ({ prefersReducedMotion, idleTimeoutMs = 8000 }) => {
+export const createPerfMonitor = ({
+  prefersReducedMotion,
+  idleTimeoutMs = 8000,
+  onIdleChange,
+}) => {
   const perfElements = {
     fps: document.querySelector('[data-perf="fps"] .perf-value'),
     quality: document.querySelector('[data-perf="quality"] .perf-value'),
@@ -31,6 +35,7 @@ export const createPerfMonitor = ({ prefersReducedMotion, idleTimeoutMs = 8000 }
     if (state.idle === idle) return;
     state.idle = idle;
     document.body.classList.toggle("is-idle", idle);
+    if (typeof onIdleChange === "function") onIdleChange(idle);
   };
 
   const getQualityMode = () => {
@@ -123,15 +128,27 @@ export const createPerfMonitor = ({ prefersReducedMotion, idleTimeoutMs = 8000 }
     if (state.idle) setIdle(false);
   };
 
+  const handleInteraction = () => {
+    recordInteraction();
+  };
+
   const start = () => {
     updateQualityState();
     updateRenderState();
     document.addEventListener("visibilitychange", updateRenderState);
+    document.addEventListener("pointerdown", handleInteraction, { passive: true });
+    document.addEventListener("keydown", handleInteraction);
+    document.addEventListener("touchstart", handleInteraction, { passive: true });
+    document.addEventListener("wheel", handleInteraction, { passive: true });
     requestAnimationFrame(updateLoop);
   };
 
   const stop = () => {
     document.removeEventListener("visibilitychange", updateRenderState);
+    document.removeEventListener("pointerdown", handleInteraction);
+    document.removeEventListener("keydown", handleInteraction);
+    document.removeEventListener("touchstart", handleInteraction);
+    document.removeEventListener("wheel", handleInteraction);
   };
 
   return { start, stop, recordInteraction, getMetrics: () => metrics };

@@ -6,7 +6,7 @@
   --glow: 0 0 18px rgba(0, 255, 106, 0.55);
   --scanline-opacity: 0.2;
   --matrix-opacity: 0.6;
-  --slider-bottom: 18%;
+  --slider-bottom: 15%;
   --shadow-green-soft: 0 0 10px rgba(0, 255, 106, 0.45);
   --shadow-green-mid: 0 0 12px rgba(0, 255, 106, 0.6);
   --shadow-hud:
@@ -411,12 +411,12 @@ html:not(.fonts-ready) #resume::after {
 }
 /* === Performance Layer === */
 #performance-layer {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 0;
-  transform: translate(-50%, -120%) scale(var(--perf-scale, 1));
+  top: clamp(12px, 4vh, 56px);
+  transform: translateX(-50%) scale(var(--perf-scale, 1));
   transform-origin: center bottom;
-  z-index: 3;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -425,10 +425,10 @@ html:not(.fonts-ready) #resume::after {
   padding: 0;
   margin: 0;
   pointer-events: none;
-  opacity: calc(0.75 + (var(--perf-boost, 0) * 0.25));
+  opacity: calc(0.9 + (var(--perf-boost, 0) * 0.1));
   filter: drop-shadow(
-    0 0 calc(10px + (var(--perf-boost, 0) * 18px))
-      rgba(0, 255, 136, calc(0.45 + (var(--perf-boost, 0) * 0.35)))
+    0 0 calc(14px + (var(--perf-boost, 0) * 20px))
+      rgba(0, 255, 136, calc(0.6 + (var(--perf-boost, 0) * 0.3)))
   );
   transition:
     opacity 0.25s ease,
