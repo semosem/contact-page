@@ -1,5 +1,59 @@
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
+const escapeHtml = (value) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const HIGHLIGHT_LEVELS = [
+  [],
+  ["react", "vue", "node", "angular"],
+  ["react", "vue", "node", "angular", "bug", "bugs"],
+  ["react", "vue", "node", "angular", "bug", "bugs", "performance"],
+  [
+    "react",
+    "vue",
+    "node",
+    "angular",
+    "bug",
+    "bugs",
+    "performance",
+    "production",
+    "ship",
+    "deliver",
+    "release",
+  ],
+  [
+    "react",
+    "vue",
+    "node",
+    "angular",
+    "bug",
+    "bugs",
+    "performance",
+    "production",
+    "ship",
+    "deliver",
+    "release",
+    "collaboration",
+    "team",
+    "teams",
+  ],
+];
+
+const buildHighlightedText = (text, level) => {
+  if (level <= 0) return escapeHtml(text);
+  const words = HIGHLIGHT_LEVELS[Math.min(level, HIGHLIGHT_LEVELS.length - 1)];
+  if (!words.length) return escapeHtml(text);
+  const pattern = new RegExp(`\\b(${words.map(escapeRegExp).join("|")})\\b`, "gi");
+  return escapeHtml(text).replace(pattern, '<span class="hl">$1</span>');
+};
+
 export const createContentController = ({
   dom,
   resumeContent,
@@ -8,6 +62,7 @@ export const createContentController = ({
   prefersReducedMotion,
 }) => {
   const rootStyle = document.documentElement.style;
+  const smallScreenQuery = window.matchMedia("(max-width: 900px), (max-height: 700px)");
   const state = {
     intensity: 0,
     easedIntensity: 0,
@@ -32,24 +87,26 @@ export const createContentController = ({
     document.body.dataset.tier = tierLabel.toLowerCase();
 
     const stepIndex = Math.floor(value / sliderStep);
-    const index =
-      value === sliderMax
-        ? resumeContent.length
-        : Math.min(resumeContent.length - 1, stepIndex);
+    const index = Math.min(resumeContent.length - 1, stepIndex);
 
     const isMax = value === sliderMax;
-    const resumeText = isMax
+    const isSmallScreen = smallScreenQuery.matches;
+    const showCallNow = isMax && !isSmallScreen;
+    const resumeText = showCallNow
       ? "CALL NOW!"
       : resumeContent[index] ?? "undefined";
 
-    if (isMax) {
+    if (showCallNow) {
+      dom.resume.dataset.hl = "0";
       dom.resume.innerHTML = `<span class="call-text">${resumeText}</span><span class="call-fire" aria-hidden="true"></span>`;
     } else {
-      dom.resume.textContent = resumeText;
+      const highlightLevel = Math.min(5, Math.floor(state.intensity * 6));
+      dom.resume.dataset.hl = String(highlightLevel);
+      dom.resume.innerHTML = buildHighlightedText(resumeText, highlightLevel);
     }
 
     dom.resume.dataset.text = resumeText;
-    dom.resume.classList.toggle("call-flash", isMax);
+    dom.resume.classList.toggle("call-flash", showCallNow);
 
     const hue = 115 + state.intensity * 50;
     if (dom.title) {
@@ -101,7 +158,7 @@ export const createContentController = ({
       String(0.45 + state.easedIntensity * 0.45)
     );
     rootStyle.setProperty("--perf-boost", String(state.easedIntensity));
-    rootStyle.setProperty("--perf-scale", String(1 + state.easedIntensity * 0.22));
+    rootStyle.setProperty("--perf-scale", "1");
 
     state.glitchStrength = 0.08 + state.easedIntensity * 0.25;
 

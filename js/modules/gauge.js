@@ -10,7 +10,7 @@ export const initGauge = ({ container, getMetrics, interval = 1500 }) => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
 
-  const drawArc = (cx, cy, radius, value) => {
+  const drawArc = (cx, cy, radius, value, color) => {
     const start = Math.PI;
     const end = 0;
     ctx.lineWidth = Math.max(3, radius * 0.12);
@@ -22,7 +22,6 @@ export const initGauge = ({ container, getMetrics, interval = 1500 }) => {
     ctx.stroke();
 
     const valueAngle = start + (value / 100) * Math.PI;
-    const color = value > 85 ? "#ff4d4d" : value > 65 ? "#ffe066" : "#00ff6a";
     ctx.strokeStyle = color;
     ctx.shadowColor = color;
     ctx.shadowBlur = radius * 0.5;
@@ -48,12 +47,19 @@ export const initGauge = ({ container, getMetrics, interval = 1500 }) => {
     ctx.clearRect(0, 0, width, height);
 
     const metrics = typeof getMetrics === "function" ? getMetrics() : {};
-    const fpsValue = clamp(metrics.fps || 0, 0, 100);
+    const fpsValue = clamp(((metrics.fps || 0) / 60) * 100, 0, 100);
     const frameMs = metrics.frameMs || 16;
     const frameValue = clamp(frameMs * 2, 0, 100);
     const loadValue = clamp(metrics.loadScore || 0, 0, 100);
     const values = [fpsValue, frameValue, loadValue];
     const labels = ["FPS", "FRAME", "LOAD"];
+
+    const getGaugeColor = (label, value) => {
+      if (label === "FPS") {
+        return value < 50 ? "#ff4d4d" : value < 70 ? "#ffe066" : "#00ff6a";
+      }
+      return value > 70 ? "#ff4d4d" : value > 45 ? "#ffe066" : "#00ff6a";
+    };
 
     const colWidth = width / values.length;
     const radius = Math.min(colWidth * 0.32, height * 0.7);
@@ -68,8 +74,10 @@ export const initGauge = ({ container, getMetrics, interval = 1500 }) => {
 
     values.forEach((value, index) => {
       const cx = colWidth * (index + 0.5);
-      drawArc(cx, baseY, radius, value);
-      ctx.fillText(labels[index], cx, baseY + radius * 0.18);
+      const label = labels[index];
+      const color = getGaugeColor(label, value);
+      drawArc(cx, baseY, radius, value, color);
+      ctx.fillText(label, cx, baseY + radius * 0.18);
     });
   };
 

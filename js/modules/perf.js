@@ -95,7 +95,10 @@ export const createPerfMonitor = ({ prefersReducedMotion, idleTimeoutMs = 8000 }
       metrics.fps = Math.round(
         (state.frameCount * 1000) / (now - state.lastFpsUpdate)
       );
-      if (perfElements.fps) perfElements.fps.textContent = `${metrics.fps}`;
+      if (perfElements.fps) {
+      perfElements.fps.textContent = `${metrics.fps}`;
+      perfElements.fps.classList.add("perf-value-red");
+    }
       state.frameCount = 0;
       state.lastFpsUpdate = now;
     }
