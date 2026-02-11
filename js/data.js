@@ -12,8 +12,8 @@ export const MATRIX_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export const RESUME_CONTENT = [
   "Lets turn ideas into reliable software with clean and maintainable code.",
-  "Scalable frontend architecture and maintainability upgrades are my specialty.",
-  "Premium interaction design without the performance heat",
+  "I specialize in building scalable frontend architectures and making full-stack apps easier to maintain.",
+  "I can plug in premium interaction design without the performance heat",
   "Across React, TypeScript, JS, Vue, Node, and Angular",
   "I hunt bugs fast and fix root causes, not just symptoms.",
   "Known for precise git history and disciplined, low-noise collaboration.",

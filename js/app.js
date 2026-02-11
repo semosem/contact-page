@@ -43,6 +43,26 @@ if (missing.length) {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
+  const initKeyboardHint = () => {
+    const hint = document.getElementById("keyboard-hint");
+    if (!hint || prefersReducedMotion) return null;
+    if (hint.dataset.split === "true") return { hint };
+    const text = hint.textContent || "";
+    if (!text.trim()) return null;
+    hint.textContent = "";
+    hint.classList.add("hint-scatter");
+    const fragment = document.createDocumentFragment();
+    Array.from(text).forEach((char) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      if (char === " ") span.classList.add("space");
+      fragment.appendChild(span);
+    });
+    hint.appendChild(fragment);
+    hint.dataset.split = "true";
+    return { hint };
+  };
+
   const isMobile = window.matchMedia(
     "(max-width: 900px), (max-height: 700px)"
   ).matches;
@@ -58,6 +78,45 @@ if (missing.length) {
         rainInterval: Math.max(45, SETTINGS.rainInterval),
       }
     : SETTINGS;
+
+  const hintState = initKeyboardHint();
+  let hintTimer = null;
+  let hintArmed = true;
+  const setScatterVars = () => {
+    if (!hintState?.hint) return;
+    const spans = hintState.hint.querySelectorAll("span");
+    spans.forEach((span, index) => {
+      const scatterX = (Math.random() * 2 - 1) * 28;
+      const scatterY = (Math.random() * 2 - 1) * 16;
+      const scatterR = (Math.random() * 2 - 1) * 14;
+      span.style.setProperty("--scatter-x", `${scatterX.toFixed(1)}px`);
+      span.style.setProperty("--scatter-y", `${scatterY.toFixed(1)}px`);
+      span.style.setProperty("--scatter-r", `${scatterR.toFixed(1)}deg`);
+      span.style.animationDelay = `${index * 18}ms`;
+    });
+  };
+  const playHintAssemble = () => {
+    if (!hintState?.hint) return;
+    setScatterVars();
+    hintState.hint.classList.remove("hint-animate");
+    void hintState.hint.offsetWidth;
+    hintState.hint.classList.add("hint-animate");
+  };
+  const scheduleHint = (delay = 5000) => {
+    if (!hintState?.hint) return;
+    if (hintTimer) clearTimeout(hintTimer);
+    hintTimer = window.setTimeout(() => {
+      if (!hintArmed) return;
+      playHintAssemble();
+      hintArmed = false;
+    }, delay);
+  };
+  const onUserInteraction = () => {
+    if (hintTimer) clearTimeout(hintTimer);
+    hintArmed = true;
+    scheduleHint();
+  };
+  scheduleHint(900);
 
   const content = createContentController({
     dom,
@@ -85,6 +144,7 @@ if (missing.length) {
     audio.updateAuto(value, userInitiated);
     if (gifs) gifs.update(state);
     applyMatrixIntensity(state.easedIntensity);
+    if (userInitiated) onUserInteraction();
   };
 
   const showEasterEgg = () => {
