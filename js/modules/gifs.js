@@ -1,60 +1,79 @@
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-export const createGifLayer = ({ container, gifs, maxGifs }) => {
+export const createAmbientLayer = ({ container, maxShards = 6 }) => {
   if (!container) return null;
-  const gifPool = [];
+  const shardPool = [];
   let lastShuffle = 0;
 
-  const ensurePool = () => {
-    if (gifPool.length) return;
-    for (let i = 0; i < maxGifs; i += 1) {
-      const gif = document.createElement("img");
-      gif.src = gifs[i % gifs.length];
-      gif.className = "gif";
-      gif.loading = "lazy";
-      gif.decoding = "async";
-      container.appendChild(gif);
-      gifPool.push(gif);
-      randomizeGif(gif, true);
-    }
-  };
+  const randomizeShard = (shard, initial = false) => {
+    const isLine = Math.random() > 0.55;
+    const width = isLine ? 3 + Math.random() * 5 : 40 + Math.random() * 120;
+    const height = isLine ? 80 + Math.random() * 180 : 18 + Math.random() * 60;
+    const left = Math.random() * 90;
+    const top = Math.random() * 85;
+    const blur = isLine ? 6 + Math.random() * 10 : 10 + Math.random() * 16;
+    const rot = `${(Math.random() * 20 - 10).toFixed(2)}deg`;
+    const dx = `${(Math.random() * 80 - 40).toFixed(2)}px`;
+    const dy = `${(-40 - Math.random() * 120).toFixed(2)}px`;
+    const opacity = (0.15 + Math.random() * 0.45).toFixed(2);
+    const duration = `${(6 + Math.random() * 8).toFixed(2)}s`;
+    const delay = `${(-Math.random() * 8).toFixed(2)}s`;
 
-  const randomizeGif = (gif, initial = false) => {
-    const size = 200 + Math.random() * 180;
-    gif.style.left = `${Math.random() * 90}%`;
-    gif.style.top = `${Math.random() * 85}%`;
-    gif.style.width = `${size}px`;
-    gif.style.height = "auto";
+    shard.style.left = `${left}%`;
+    shard.style.top = `${top}%`;
+    shard.style.width = `${width}px`;
+    shard.style.height = `${height}px`;
+    shard.style.setProperty("--spark-rot", rot);
+    shard.style.setProperty("--spark-dx", dx);
+    shard.style.setProperty("--spark-dy", dy);
+    shard.style.setProperty("--spark-blur", `${blur}px`);
+    shard.style.setProperty("--spark-opacity", opacity);
+    shard.style.animationDuration = duration;
+    shard.style.animationDelay = delay;
+    shard.classList.toggle("is-line", isLine);
+
     if (initial) {
-      gif.style.transform = "scale(0.9)";
+      shard.style.opacity = "0";
     }
   };
 
-  const hideAll = () => {
-    gifPool.forEach((gif) => {
-      gif.style.opacity = "0";
-    });
+  const ensurePool = () => {
+    if (shardPool.length) return;
+    for (let i = 0; i < maxShards; i += 1) {
+      const shard = document.createElement("div");
+      shard.className = "ambient-shard";
+      container.appendChild(shard);
+      shardPool.push(shard);
+      randomizeShard(shard, true);
+    }
+  };
+
+  const removeAll = () => {
+    shardPool.forEach((shard) => shard.remove());
+    shardPool.length = 0;
   };
 
   const update = ({ intensity, easedIntensity }) => {
     if (intensity < 0.6) {
-      hideAll();
+      removeAll();
       return;
     }
 
     ensurePool();
 
-    const targetCount = Math.round(
-      Math.pow(clamp(intensity, 0, 1), 1.6) * maxGifs
+    const targetCount = Math.max(
+      1,
+      Math.round(Math.pow(clamp(intensity, 0, 1), 1.4) * maxShards)
     );
-    const opacity = Math.min(1, 0.12 + intensity * 0.9);
+    const opacity = Math.min(1, 0.2 + intensity * 0.7);
+    const scale = 0.85 + easedIntensity * 0.3;
 
-    gifPool.forEach((gif, index) => {
+    shardPool.forEach((shard, index) => {
       if (index < targetCount) {
-        gif.style.opacity = String(opacity);
-        gif.style.transform = `scale(${0.85 + easedIntensity * 0.4})`;
+        shard.style.opacity = String(opacity);
+        shard.style.setProperty("--spark-scale", scale.toFixed(2));
       } else {
-        gif.style.opacity = "0";
+        shard.style.opacity = "0";
       }
     });
 
@@ -62,12 +81,12 @@ export const createGifLayer = ({ container, gifs, maxGifs }) => {
       const now = performance.now();
       if (now - lastShuffle > 2500) {
         const pick = Math.floor(Math.random() * targetCount);
-        const gif = gifPool[pick];
-        if (gif) randomizeGif(gif);
+        const shard = shardPool[pick];
+        if (shard) randomizeShard(shard);
         lastShuffle = now;
       }
     }
   };
 
-  return { update, hideAll };
+  return { update, removeAll };
 };
