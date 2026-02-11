@@ -8,23 +8,26 @@
     <meta
       name="description"
       content="Sem Gebresilassie — software developer focused on modern web apps, performance, and creative interaction design." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Share+Tech+Mono&display=swap" />
+      href="./assets/fonts/Anton-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Share+Tech+Mono&display=swap"
-      media="print"
-      onload="this.media = 'all'" />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Anton&family=Share+Tech+Mono&display=swap" />
-    </noscript>
-    <link rel="stylesheet" href="./styles.min.css" title="styles" />
+      rel="preload"
+      href="./assets/fonts/ShareTechMono-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin />
+    <script>
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          document.documentElement.classList.add("fonts-ready");
+        });
+      }
+    </script>
+    <link rel="stylesheet" href="./styles.css" title="styles" />
   </head>
   <body>
     <div class="sweep-yellow" aria-hidden="true"></div>
@@ -108,7 +111,8 @@
           <img
             src="./assets/blue.png"
             alt="LinkedIn"
-            loading="lazy"
+            width="96"
+            height="64"
             decoding="async" />
         </a>
         <a
@@ -119,7 +123,8 @@
           <img
             src="./assets/red.png"
             alt="GitHub"
-            loading="lazy"
+            width="96"
+            height="64"
             decoding="async" />
         </a>
       </div>
@@ -161,7 +166,7 @@
         <div id="terminal-output" aria-live="polite"></div>
         <div id="terminal-input-line">
           <span class="prompt">$ </span>
-          <input type="text" id="terminal-input" />
+          <input type="text" id="terminal-input" aria-label="Terminal input" />
         </div>
       </div>
     </div>
