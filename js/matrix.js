@@ -192,6 +192,7 @@ export const startTitleGlitch = ({ title, prefersReducedMotion, interval, getStr
   };
 
   const glitch = () => {
+    if (document.body.classList.contains("is-idle")) return;
     if (nameSpan && roleSpan) {
       nameSpan.textContent = glitchText(originalName);
       roleSpan.textContent = glitchText(originalRole);
