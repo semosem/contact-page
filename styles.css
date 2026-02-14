@@ -2028,16 +2028,20 @@ body.is-idle .call-flash .call-fire {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 14px;
+    padding: 9px 12px;
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 12.5px;
   }
 
-  /* Keep skills, but limit to 2 pills on small screens to reduce clutter. */
+  /* Keep skills visible but tidy on small screens: show 3 and center them. */
   #skills-container {
-    max-width: min(92vw, 520px);
+    top: 60px;
+    left: 12px;
+    right: 12px;
+    max-width: none;
+    justify-content: center;
   }
-  #skills-container .skill-pill:nth-child(n + 3) {
+  #skills-container .skill-pill:nth-child(n + 4) {
     display: none;
   }
 
