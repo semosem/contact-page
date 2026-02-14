@@ -49,8 +49,17 @@ export const createMatrixRain = ({ canvas, chars, settings, prefersReducedMotion
   };
 
   const resize = () => {
-    const dpr = window.devicePixelRatio || 1;
-    const scale = typeof settings.matrixScale === "number" ? settings.matrixScale : 1;
+    const isSmallScreen = window.matchMedia(
+      "(max-width: 900px), (max-height: 700px)",
+    ).matches;
+
+    // Reduce render cost on small screens: cap DPR + downscale internal render size.
+    const rawDpr = window.devicePixelRatio || 1;
+    const dpr = isSmallScreen ? Math.min(rawDpr, 1.25) : rawDpr;
+
+    const baseScale = typeof settings.matrixScale === "number" ? settings.matrixScale : 1;
+    const scale = isSmallScreen ? Math.min(baseScale, 0.45) : baseScale;
+
     const renderWidth = window.innerWidth * scale;
     const renderHeight = window.innerHeight * scale;
     const fontSize = settings.matrixFontSize * scale;
