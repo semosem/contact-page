@@ -13,7 +13,7 @@ export const SETTINGS = {
 export const MATRIX_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export const RESUME_CONTENT = [
-  "Lets turn ideas into reliable software with clean and maintainable code.",
+  "Let’s turn ideas into reliable software with clean and maintainable code.",
   "I specialize in building scalable frontend architectures and making full-stack apps easier to maintain.",
   "Reliable software, shipped fast. I help founders and small teams turn ideas into maintainable clean code, clear communication, no drama.",
   "Experience across construction tech, video marketing, and heavy machinery. Tools: Redux, GraphQL, Docker, Google Cloud, Azure.",
