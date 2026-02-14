@@ -251,8 +251,10 @@ export const createContentController = ({
       dom.resume.style.textTransform = "none";
     } else {
       // Clamp letter-spacing to avoid line-wrap reflow/jitter (e.g. last word popping to next line).
+      // Quantize letter-spacing so tiny slider movements don't recompute line breaks.
+      const spacingIntensity = Math.round(state.easedIntensity * 6) / 6;
       dom.resume.style.letterSpacing = `${clamp(
-        0.22 + state.easedIntensity * 0.45,
+        0.22 + spacingIntensity * 0.45,
         0.22,
         0.75,
       )}px`;
@@ -262,7 +264,8 @@ export const createContentController = ({
       dom.resume.style.filter = `drop-shadow(0 0 ${
         6 + state.easedIntensity * 12
       }px rgba(0, 255, 106, ${0.3 + state.easedIntensity * 0.4}))`;
-      dom.resume.style.textTransform = isHard ? "uppercase" : "none";
+      // Avoid text-transform toggles causing line-wrap jitter as intensity crosses thresholds.
+      dom.resume.style.textTransform = "none";
     }
 
     // Shake only at the very end, and never while idle.
