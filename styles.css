@@ -1997,10 +1997,42 @@ body.is-idle .call-flash .call-fire {
   #performance-layer {
     display: none;
   }
-  #top-actions,
+  /* Keep the primary CTA visible on small screens; hide only the CV dropdown. */
   #cv-dropdown {
     display: none !important;
   }
+
+  #top-actions {
+    display: flex;
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(0, 255, 106, 0.22);
+  }
+  #cta-links {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  /* On mobile, keep only the booking CTA (icons take too much space). */
+  #linkedin-link,
+  #github-link,
+  #cv-icon {
+    display: none !important;
+  }
+
+  #book-call-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
   #hireme-rig .flag-text {
     display: none;
   }
