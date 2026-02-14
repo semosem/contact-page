@@ -252,9 +252,9 @@ export const createContentController = ({
     } else {
       // Clamp letter-spacing to avoid line-wrap reflow/jitter (e.g. last word popping to next line).
       dom.resume.style.letterSpacing = `${clamp(
-        0.22 + state.easedIntensity * 0.25,
+        0.22 + state.easedIntensity * 0.45,
         0.22,
-        0.48,
+        0.75,
       )}px`;
       dom.resume.style.textShadow = `0 0 ${8 + state.easedIntensity * 18}px rgba(0, 255, 106, ${
         0.45 + state.easedIntensity * 0.35
