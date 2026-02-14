@@ -2033,6 +2033,14 @@ body.is-idle .call-flash .call-fire {
     font-size: 13px;
   }
 
+  /* Keep skills, but limit to 2 pills on small screens to reduce clutter. */
+  #skills-container {
+    max-width: min(92vw, 520px);
+  }
+  #skills-container .skill-pill:nth-child(n + 3) {
+    display: none;
+  }
+
   #hireme-rig .flag-text {
     display: none;
   }
