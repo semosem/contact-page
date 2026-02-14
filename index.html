@@ -27,7 +27,7 @@
         });
       }
     </script>
-    <link rel="stylesheet" href="./styles.min.css" title="styles" />
+    <link rel="stylesheet" href="./styles.css" title="styles" />
   </head>
   <body>
     <div id="scanlines"></div>
@@ -87,7 +87,8 @@
       <input
         type="range"
         min="0"
-        max="100"
+        max="85"
+        step="5"
         value="0"
         id="slider"
         aria-label="Intensity" />
@@ -125,6 +126,15 @@
             width="96"
             height="64"
             decoding="async" />
+        </a>
+        <a
+          id="book-call-link"
+          class="cta-button cta-button--small"
+          href="https://calendly.com/dwell-sem"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Book a 15-min intro call on Calendly">
+          Book a call <span aria-hidden="true">→</span>
         </a>
       </div>
       <div id="cv-icon">

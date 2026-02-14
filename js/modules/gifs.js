@@ -5,6 +5,8 @@ export const createGifLayer = ({ container, gifs, maxGifs }) => {
   const gifPool = [];
   let lastShuffle = 0;
 
+  // (idleObserver moved below removeAll)
+
   const ensurePool = () => {
     if (gifPool.length) return;
     for (let i = 0; i < maxGifs; i += 1) {
@@ -36,9 +38,29 @@ export const createGifLayer = ({ container, gifs, maxGifs }) => {
     });
   };
 
+  const removeAll = () => {
+    gifPool.forEach((gif) => {
+      try {
+        gif.remove();
+      } catch {
+        // ignore
+      }
+    });
+    gifPool.length = 0;
+  };
+
+  // Ensure GIF nodes are removed from DOM when page goes idle (even if update() isn't called).
+  const idleObserver = new MutationObserver(() => {
+    if (document.body.classList.contains("is-idle")) {
+      removeAll();
+    }
+  });
+  idleObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
   const update = ({ intensity, easedIntensity }) => {
-    if (intensity < 0.6) {
-      hideAll();
+    // Remove GIF nodes entirely while idle or low intensity.
+    if (document.body.classList.contains("is-idle") || intensity < 0.6) {
+      removeAll();
       return;
     }
 
@@ -69,5 +91,10 @@ export const createGifLayer = ({ container, gifs, maxGifs }) => {
     }
   };
 
-  return { update, hideAll };
+  const destroy = () => {
+    idleObserver.disconnect();
+    removeAll();
+  };
+
+  return { update, hideAll, removeAll, destroy };
 };

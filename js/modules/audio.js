@@ -125,12 +125,59 @@ export const createMatrixAudio = ({ button }) => {
     }
   };
 
+  const stop = (setMuted = false) => {
+    if (!audioContext) {
+      if (setMuted) userMuted = true;
+      setButtonState(false);
+      return;
+    }
+    if (setMuted) userMuted = true;
+    if (audioContext.state === "running") {
+      audioContext.suspend().then(() => {
+        isPlaying = false;
+        setButtonState(false);
+      });
+    } else {
+      isPlaying = false;
+      setButtonState(false);
+    }
+  };
+
   const init = () => {
     if (!button) return;
     setButtonState(isPlaying);
     button.title = "Toggle matrix hum";
     button.addEventListener("click", toggle);
+
+    // Track recent user interaction so we don't kill audio mid-interaction.
+    let lastInteractionAt = Date.now();
+    const markInteraction = () => {
+      lastInteractionAt = Date.now();
+    };
+
+    // Capture common interaction signals.
+    ["pointerdown", "mousemove", "keydown", "touchstart", "wheel"].forEach((evt) => {
+      window.addEventListener(evt, markInteraction, { passive: true });
+    });
+
+    // Turn audio off when tab becomes hidden.
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop(false);
+    });
+    window.addEventListener("blur", () => stop(false));
+
+    // Turn audio off when idle *and* the user is not actively interacting.
+    const idleObserver = new MutationObserver(() => {
+      const idle = document.body.classList.contains("is-idle");
+      if (!idle) return;
+      const msSinceInteraction = Date.now() - lastInteractionAt;
+      if (msSinceInteraction > 1500) stop(false);
+    });
+    idleObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
   };
 
-  return { init, toggle, updateAuto, syncWithContext, ensureContext };
+  return { init, toggle, updateAuto, syncWithContext, ensureContext, stop };
 };

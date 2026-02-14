@@ -35,6 +35,14 @@ export const createPerfMonitor = ({
     if (state.idle === idle) return;
     state.idle = idle;
     document.body.classList.toggle("is-idle", idle);
+
+    // Force-stop any shake animation immediately when entering idle.
+    if (idle) {
+      document.body.classList.remove("shake");
+      document.body.style.animationDuration = "";
+      document.body.style.animation = "";
+    }
+
     if (typeof onIdleChange === "function") onIdleChange(idle);
   };
 
