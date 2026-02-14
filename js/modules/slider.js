@@ -59,6 +59,10 @@ export const createSliderController = ({
   };
 
   const init = () => {
+    // Keep DOM attributes consistent with runtime settings (prevents mobile/desktop mismatch).
+    slider.max = String(sliderMax);
+    slider.step = String(sliderStep);
+
     slider.addEventListener("input", handleInput);
     document.addEventListener("keydown", handleKeydown);
   };
