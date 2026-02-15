@@ -2037,7 +2037,7 @@ body.is-idle .call-flash .call-fire {
     left: 12px;
     right: 12px;
     max-width: none;
-    justify-content: center;
+    justify-content: flex-start;
   }
   /* Show 2 skills + the CTA pill */
   #skills-container .skill-pill:nth-child(n + 4):not(#book-call-pill) {
