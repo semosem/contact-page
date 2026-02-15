@@ -1094,6 +1094,11 @@ body.is-idle .gif {
   filter: saturate(0.9);
 }
 
+/* Mobile header is small-screen only */
+#mobile-header {
+  display: none;
+}
+
 /* By default, keep the CTA pill hidden (we only use it on mobile). */
 #book-call-pill {
   display: none;
