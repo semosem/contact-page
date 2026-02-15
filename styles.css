@@ -2207,26 +2207,9 @@ body.is-idle .call-flash .call-fire {
   .sale-indicator {
     font-size: 10px;
   }
+  /* Remove the keyboard hint on mobile (touch UI). */
   #keyboard-hint {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -1.4rem;
-
-    /* Make hint readable on small screens */
-    font-size: 12px;
-    letter-spacing: 0.6px;
-    line-height: 1.25;
-
-    max-width: min(92vw, 520px);
-    white-space: normal;
-    text-align: center;
-
-    padding: 6px 10px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.72);
-    border: 1px solid rgba(0, 255, 106, 0.35);
-    -webkit-text-stroke: 0;
+    display: none !important;
   }
   #terminal {
     display: none;
