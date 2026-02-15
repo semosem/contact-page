@@ -2034,6 +2034,14 @@ body.is-idle .call-flash .call-fire {
 
     justify-content: flex-start;
   }
+
+  /* Dot separator between skill pills (no literal bullet characters in text) */
+  #skills-container .skill-pill + .skill-pill::before {
+    content: "·";
+    margin-right: 8px;
+    color: rgba(0, 255, 106, 0.65);
+    text-shadow: 0 0 10px rgba(0, 255, 106, 0.25);
+  }
   /* Show 2 skills + the CTA pill */
   #skills-container > :nth-child(n + 4):not(#book-call-pill) {
     display: none;
