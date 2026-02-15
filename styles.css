@@ -2008,18 +2008,16 @@ body.is-idle .call-flash .call-fire {
     display: none !important;
   }
 
-  /* Show the CTA pill inline with skills */
+  /* Show the CTA pill inline with skills.
+     Keep styling identical to other .skill-pill items (positioning-only change). */
   #book-call-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
 
-    background: rgba(0, 255, 106, 0.28);
-    border: 1px solid rgba(128, 255, 196, 0.92);
-    box-shadow:
-      0 0 12px rgba(0, 255, 136, 0.65),
-      0 0 22px rgba(0, 255, 106, 0.45);
+    /* If needed to fit, slightly downsize text only on mobile. */
+    font-size: 0.64rem;
   }
 
   /* Keep skills visible but tidy on small screens: show 3 and center them. */
