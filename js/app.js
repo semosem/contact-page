@@ -75,6 +75,32 @@ if (missing.length) {
 
   if (isMobile) {
     document.body.classList.add("perf-mobile");
+
+    // Mobile-only: give each word in the resume line its own background.
+    // (Keeps the "terminal" vibe but removes the big container box.)
+    const wrapResumeWords = () => {
+      const el = dom.resume;
+      if (!el) return;
+      if (el.dataset.wordsWrapped === "true") return;
+
+      const text = (el.textContent || "").replace(/\s+/g, " ").trim();
+      if (!text) return;
+
+      el.textContent = "";
+      const frag = document.createDocumentFragment();
+      const words = text.split(" ");
+      words.forEach((word, i) => {
+        const span = document.createElement("span");
+        span.className = "resume-word";
+        span.textContent = word;
+        frag.appendChild(span);
+        if (i < words.length - 1) frag.appendChild(document.createTextNode(" "));
+      });
+      el.appendChild(frag);
+      el.dataset.wordsWrapped = "true";
+    };
+
+    wrapResumeWords();
   }
 
   const tunedSettings = isMobile

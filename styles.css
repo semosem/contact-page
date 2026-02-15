@@ -721,6 +721,15 @@ html:not(.fonts-ready) #resume::after {
   opacity: 0;
   animation: none;
 }
+
+/* Prevent a one-time text/layout jump while the webfont swaps in. */
+html:not(.fonts-ready) #resume {
+  opacity: 0;
+}
+html.fonts-ready #resume {
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
 #resume::before {
   color: rgba(0, 255, 106, 0.35);
   text-shadow: 0 0 10px rgba(0, 255, 106, 0.45);
@@ -1999,7 +2008,8 @@ body.is-idle .call-flash .call-fire {
 }
 @media (max-width: 900px), (max-height: 700px) {
   :root {
-    --slider-bottom: 26%;
+    /* Robust positioning across phone heights */
+    --slider-bottom: clamp(140px, 24vh, 200px);
     --mobile-side: 22px;
     --mobile-top: 180px;
     --mobile-bottom: 240px;
@@ -2061,9 +2071,8 @@ body.is-idle .call-flash .call-fire {
     align-items: center;
     justify-content: center;
 
-    /* Match the older “outlined/glow” pill look */
     background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(0, 255, 106, 0.62);
+    border: none;
     border-radius: 12px;
     padding: 5px 9px;
 
@@ -2072,9 +2081,8 @@ body.is-idle .call-flash .call-fire {
     color: #eafff2;
     text-shadow: 0 0 10px rgba(0, 255, 106, 0.18);
 
-    box-shadow:
-      0 0 10px rgba(0, 255, 106, 0.45),
-      inset 0 0 0 1px rgba(0, 255, 106, 0.18);
+    /* Subtle glow without a hard border */
+    box-shadow: 0 0 8px rgba(0, 255, 106, 0.35);
 
     letter-spacing: var(--ls-sub);
     line-height: var(--lh-sub);
@@ -2085,11 +2093,8 @@ body.is-idle .call-flash .call-fire {
   }
   .mobile-chip:hover {
     background: rgba(0, 0, 0, 0.18);
-    border-color: rgba(0, 255, 106, 0.8);
     transform: translateY(-1px);
-    box-shadow:
-      0 0 14px rgba(0, 255, 106, 0.6),
-      inset 0 0 0 1px rgba(0, 255, 106, 0.22);
+    box-shadow: 0 0 10px rgba(0, 255, 106, 0.42);
   }
 
   /* Hide the old skills container on small screens (header replaces it). */
@@ -2125,7 +2130,10 @@ body.is-idle .call-flash .call-fire {
       calc(var(--mobile-bottom) + env(safe-area-inset-bottom));
     align-items: flex-start;
     text-align: left;
-    gap: 20px;
+
+    /* More breathing room between hero lines */
+    gap: 26px;
+
     width: 100%;
     margin: 0;
   }
@@ -2147,25 +2155,41 @@ body.is-idle .call-flash .call-fire {
     -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
   }
   #resume {
-    font-size: clamp(1rem, 3.4vw, 1.32rem);
-    margin-bottom: 18px;
+    font-size: clamp(0.98rem, 3.2vw, 1.24rem);
+    margin-top: 8px;
+    margin-bottom: 14px;
     max-width: 58ch;
     width: 100%;
-    line-height: 1.58;
+    line-height: 1.52;
     letter-spacing: 0.3px;
     text-wrap: balance;
-    color: #eafff2;
-    text-shadow:
-      0 1px 0 rgba(0, 0, 0, 0.55),
-      0 0 10px rgba(0, 255, 106, 0.18);
-    min-height: 5.4em;
 
-    /* Improve legibility against the green haze (mobile only) */
-    background: rgba(0, 0, 0, 0.26);
-    border: 1px solid rgba(128, 255, 196, 0.22);
-    box-shadow: 0 0 18px rgba(0, 0, 0, 0.22);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    /* Accent-green resume text (dimmer than name) */
+    color: rgba(0, 255, 106, 0.72);
+    -webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.75);
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.6),
+      0 0 10px rgba(0, 255, 106, 0.18),
+      0 0 18px rgba(0, 255, 106, 0.10);
+
+    min-height: 4.6em;
+
+    /* Mobile: keep the resume as text with a soft background per line (no container box). */
+    background: none;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* Soft background per word (applied via JS on mobile) */
+  #resume .resume-word {
+    display: inline-block;
+    padding: 2px 6px;
+    margin: 2px 2px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.34);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);
   }
   /* CTA step should work the same on mobile; only adjust styling */
   #resume.call-flash {
