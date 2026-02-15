@@ -1996,7 +1996,7 @@ body.is-idle .call-flash .call-fire {
   :root {
     --slider-bottom: 26%;
     --mobile-side: 22px;
-    --mobile-top: 170px;
+    --mobile-top: 180px;
     --mobile-bottom: 240px;
   }
   #performance-layer {
@@ -2122,6 +2122,11 @@ body.is-idle .call-flash .call-fire {
   }
   h1 .title-role {
     font-size: 0.7em;
+    color: rgba(234, 255, 242, 0.98);
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.65),
+      0 0 16px rgba(0, 255, 106, 0.22);
+    -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
   }
   #resume {
     font-size: clamp(1rem, 3.4vw, 1.32rem);
@@ -2132,8 +2137,17 @@ body.is-idle .call-flash .call-fire {
     letter-spacing: 0.3px;
     text-wrap: balance;
     color: #eafff2;
-    text-shadow: 0 0 6px rgba(0, 255, 106, 0.25);
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 0 10px rgba(0, 255, 106, 0.18);
     min-height: 5.4em;
+
+    /* Improve legibility against the green haze (mobile only) */
+    background: rgba(0, 0, 0, 0.26);
+    border: 1px solid rgba(128, 255, 196, 0.22);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
   /* CTA step should work the same on mobile; only adjust styling */
   #resume.call-flash {
@@ -2217,7 +2231,7 @@ body.is-idle .call-flash .call-fire {
   }
   #slider-container::before {
     inset: -28px -12%;
-    opacity: 1;
+    opacity: 0.86;
     filter: blur(22px);
   }
   #slider::-webkit-slider-thumb {
