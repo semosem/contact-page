@@ -2056,8 +2056,9 @@ body.is-idle .call-flash .call-fire {
     align-items: center;
     justify-content: center;
 
-    padding: 6px 10px;
-    border-radius: 11px;
+    /* Match CTA button height/shape */
+    padding: 7px 10px;
+    border-radius: 10px;
 
     font-size: 0.66rem;
     font-weight: 700;
