@@ -2019,13 +2019,11 @@ body.is-idle .call-flash .call-fire {
     /* Slightly downsize to fit in a single row */
     font-size: 0.64rem;
 
-    background: rgba(0, 255, 106, 0.92);
-    border: 1px solid rgba(0, 255, 106, 0.95);
-    color: rgba(0, 0, 0, 0.92);
-    text-shadow: none;
+    /* CTA emphasis: slightly stronger border + glow than other pills */
+    border-color: rgba(170, 255, 220, 0.98);
     box-shadow:
-      0 0 14px rgba(0, 255, 106, 0.7),
-      0 0 28px rgba(0, 255, 106, 0.45);
+      0 0 14px rgba(0, 255, 136, 0.75),
+      0 0 26px rgba(0, 255, 106, 0.5);
   }
   #book-call-pill:hover {
     filter: brightness(1.06);
@@ -2034,9 +2032,13 @@ body.is-idle .call-flash .call-fire {
   /* Keep skills visible but tidy on small screens: show 3 and center them. */
   #skills-container {
     top: 60px;
-    left: 12px;
-    right: 12px;
-    max-width: none;
+    left: var(--mobile-side);
+    right: var(--mobile-side);
+
+    /* Align with the main content/slider column */
+    width: calc(100% - (var(--mobile-side) * 2));
+    max-width: 640px;
+
     justify-content: flex-start;
   }
   /* Show 2 skills + the CTA pill */
