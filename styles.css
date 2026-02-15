@@ -2056,12 +2056,12 @@ body.is-idle .call-flash .call-fire {
     align-items: center;
     justify-content: center;
 
-    padding: 7px 12px;
-    border-radius: 12px;
+    padding: 6px 10px;
+    border-radius: 11px;
 
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.75px;
+    letter-spacing: 0.7px;
     text-transform: uppercase;
     white-space: nowrap;
 
