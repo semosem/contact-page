@@ -2018,12 +2018,6 @@ body.is-idle .call-flash .call-fire {
 
     /* Slightly downsize to fit in a single row */
     font-size: 0.64rem;
-
-    /* CTA emphasis: slightly stronger border + glow than other pills */
-    border-color: rgba(170, 255, 220, 0.98);
-    box-shadow:
-      0 0 14px rgba(0, 255, 136, 0.75),
-      0 0 26px rgba(0, 255, 106, 0.5);
   }
   #book-call-pill:hover {
     filter: brightness(1.06);
