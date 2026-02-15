@@ -2018,6 +2018,9 @@ body.is-idle .call-flash .call-fire {
 
     /* Slightly downsize to fit in a single row */
     font-size: 0.64rem;
+
+    /* Emphasize with border only (no background changes) */
+    border-color: rgba(170, 255, 220, 0.98);
   }
   #book-call-pill:hover {
     filter: brightness(1.06);
