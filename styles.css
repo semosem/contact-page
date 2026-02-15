@@ -2025,7 +2025,7 @@ body.is-idle .call-flash .call-fire {
   /* Small screens only: simple header with 3 items (TypeScript, Node.js, CTA) */
   #mobile-header {
     position: fixed;
-    top: 14px;
+    top: 18px;
     left: var(--mobile-side);
     right: var(--mobile-side);
     max-width: 640px;
