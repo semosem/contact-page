@@ -1107,7 +1107,6 @@ body.is-idle .gif {
 #mobile-header {
   display: none;
 }
-
 /* By default, keep the CTA pill hidden (we only use it on mobile). */
 #book-call-pill {
   display: none;
@@ -2164,6 +2163,7 @@ body.is-idle .call-flash .call-fire {
     letter-spacing: 0.3px;
     text-wrap: balance;
 
+
     /* Accent-green resume text (dimmer than name) */
     color: rgba(0, 255, 106, 0.72);
     -webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.75);
@@ -2174,7 +2174,7 @@ body.is-idle .call-flash .call-fire {
 
     min-height: 4.6em;
 
-    /* Mobile: keep the resume as text with a soft background per line (no container box). */
+    /* Mobile: keep the resume as text (no container box). */
     background: none;
     border: none;
     box-shadow: none;
