@@ -1093,6 +1093,11 @@ body.is-idle .gif {
   z-index: 9999;
   filter: saturate(0.9);
 }
+
+/* By default, keep the CTA pill hidden (we only use it on mobile). */
+#book-call-pill {
+  display: none;
+}
 .skill-pill {
   background: rgba(0, 255, 106, 0.32);
   border: 1px solid rgba(128, 255, 196, 0.95);
@@ -1991,16 +1996,95 @@ body.is-idle .call-flash .call-fire {
   :root {
     --slider-bottom: 26%;
     --mobile-side: 22px;
-    --mobile-top: 170px;
+    --mobile-top: 180px;
     --mobile-bottom: 240px;
   }
   #performance-layer {
     display: none;
   }
+  /* Hide the top-actions pill on mobile; CTA is shown as a skill-pill in #skills-container. */
   #top-actions,
   #cv-dropdown {
     display: none !important;
   }
+
+  /* Show desktop-styled CTA button in the skills row */
+  #book-call-pill {
+    display: inline-flex;
+  }
+
+  /* Downsize the desktop CTA styling slightly to fit the mobile row */
+  #book-call-pill.cta-button--small {
+    font-size: 0.78rem;
+    padding: 7px 10px;
+  }
+  #book-call-pill:hover {
+    filter: brightness(1.06);
+  }
+
+  /* Small screens only: simple header with 3 items (TypeScript, Node.js, CTA) */
+  #mobile-header {
+    position: fixed;
+    top: 23px;
+    left: var(--mobile-side);
+    right: var(--mobile-side);
+    max-width: 640px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    z-index: 10000;
+    pointer-events: none;
+  }
+
+  #mobile-header a {
+    pointer-events: auto;
+  }
+
+  .mobile-header__skills {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .mobile-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Match CTA button height/shape */
+    padding: 7px 10px;
+    border-radius: 10px;
+
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    background: rgba(0, 255, 106, 0.14);
+    border: 1px solid rgba(128, 255, 196, 0.75);
+    box-shadow:
+      0 0 8px rgba(0, 255, 136, 0.35),
+      0 0 14px rgba(0, 255, 106, 0.22);
+    color: #eafff2;
+  }
+
+  /* Hide the old skills container on small screens (header replaces it). */
+  #skills-container {
+    display: none !important;
+  }
+
+  /* Keep the CTA sized to match chips */
+  #book-call-pill.cta-button--small {
+    font-size: 0.78rem;
+    padding: 7px 10px;
+  }
+
   #hireme-rig .flag-text {
     display: none;
   }
@@ -2038,6 +2122,11 @@ body.is-idle .call-flash .call-fire {
   }
   h1 .title-role {
     font-size: 0.7em;
+    color: rgba(234, 255, 242, 0.98);
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.65),
+      0 0 16px rgba(0, 255, 106, 0.22);
+    -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
   }
   #resume {
     font-size: clamp(1rem, 3.4vw, 1.32rem);
@@ -2048,8 +2137,17 @@ body.is-idle .call-flash .call-fire {
     letter-spacing: 0.3px;
     text-wrap: balance;
     color: #eafff2;
-    text-shadow: 0 0 6px rgba(0, 255, 106, 0.25);
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 0 10px rgba(0, 255, 106, 0.18);
     min-height: 5.4em;
+
+    /* Improve legibility against the green haze (mobile only) */
+    background: rgba(0, 0, 0, 0.26);
+    border: 1px solid rgba(128, 255, 196, 0.22);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
   /* CTA step should work the same on mobile; only adjust styling */
   #resume.call-flash {
@@ -2133,7 +2231,7 @@ body.is-idle .call-flash .call-fire {
   }
   #slider-container::before {
     inset: -28px -12%;
-    opacity: 1;
+    opacity: 0.86;
     filter: blur(22px);
   }
   #slider::-webkit-slider-thumb {
@@ -2148,19 +2246,31 @@ body.is-idle .call-flash .call-fire {
   }
   #slider-hud {
     font-size: 10px;
+    opacity: 0.98;
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 0 12px rgba(0, 255, 106, 0.22);
   }
+  #slider-hud .hud-line {
+    color: rgba(234, 255, 242, 0.98);
+  }
+  #slider-hud .hud-value {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 106, 0.28));
+  }
+
   .sale-indicator {
     font-size: 10px;
+    opacity: 0.98;
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 0 12px rgba(0, 255, 106, 0.22);
   }
+  .sale-indicator p {
+    color: rgba(234, 255, 242, 0.98);
+  }
+  /* Remove the keyboard hint on mobile (touch UI). */
   #keyboard-hint {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -1.2rem;
-    font-size: 10px;
-    letter-spacing: 0.4px;
-    line-height: 1.1;
-    white-space: nowrap;
+    display: none !important;
   }
   #terminal {
     display: none;

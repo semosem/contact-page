@@ -44,6 +44,12 @@ if (missing.length) {
   ).matches;
 
   const initKeyboardHint = () => {
+    // On mobile we hide the hint entirely.
+    const isMobile = window.matchMedia(
+      "(max-width: 900px), (max-height: 700px)"
+    ).matches;
+    if (isMobile) return null;
+
     const hint = document.getElementById("keyboard-hint");
     if (!hint || prefersReducedMotion) return null;
     if (hint.dataset.split === "true") return { hint };
