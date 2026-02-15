@@ -2008,16 +2008,15 @@ body.is-idle .call-flash .call-fire {
     display: none !important;
   }
 
-  /* Show the CTA pill inline with skills.
-     Make it visually primary (inverted pill) while keeping the same footprint. */
+  /* Show desktop-styled CTA button in the skills row */
   #book-call-pill {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
+  }
 
-    /* Slightly downsize to fit in a single row */
-    font-size: 0.64rem;
+  /* Downsize the desktop CTA styling slightly to fit the mobile row */
+  #book-call-pill.cta-button--small {
+    font-size: 0.78rem;
+    padding: 7px 10px;
   }
   #book-call-pill:hover {
     filter: brightness(1.06);
@@ -2036,7 +2035,7 @@ body.is-idle .call-flash .call-fire {
     justify-content: flex-start;
   }
   /* Show 2 skills + the CTA pill */
-  #skills-container .skill-pill:nth-child(n + 4):not(#book-call-pill) {
+  #skills-container > :nth-child(n + 4):not(#book-call-pill) {
     display: none;
   }
 
