@@ -2022,45 +2022,66 @@ body.is-idle .call-flash .call-fire {
     filter: brightness(1.06);
   }
 
-  /* Keep skills visible but tidy on small screens: show 3 and center them. */
-  #skills-container {
-    /* Visually balanced top row */
-    top: 22px;
+  /* Small screens only: simple header with 3 items (TypeScript, Node.js, CTA) */
+  #mobile-header {
+    position: fixed;
+    top: 14px;
     left: var(--mobile-side);
     right: var(--mobile-side);
-
-    /* Align with the main content/slider column */
-    width: calc(100% - (var(--mobile-side) * 2));
     max-width: 640px;
+    margin: 0 auto;
 
+    display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
+
+    z-index: 10000;
+    pointer-events: none;
+  }
+
+  #mobile-header a {
+    pointer-events: auto;
+  }
+
+  .mobile-header__skills {
+    display: inline-flex;
+    align-items: center;
     gap: 10px;
-
-    /* Reduce visual noise against the hero */
-    filter: saturate(0.95);
+    min-width: 0;
   }
 
-  /* On mobile, don't inject separators; spacing does the job. */
-  #skills-container .skill-pill + .skill-pill::before {
-    content: none;
-  }
+  .mobile-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-  /* Make the skill pills visually compatible with the CTA without changing CTA styling */
-  #skills-container .skill-pill {
     padding: 7px 12px;
+    border-radius: 12px;
+
     font-size: 0.7rem;
+    font-weight: 700;
     letter-spacing: 0.75px;
+    text-transform: uppercase;
+    white-space: nowrap;
 
     background: rgba(0, 255, 106, 0.14);
-    border-color: rgba(128, 255, 196, 0.75);
+    border: 1px solid rgba(128, 255, 196, 0.75);
     box-shadow:
       0 0 8px rgba(0, 255, 136, 0.35),
       0 0 14px rgba(0, 255, 106, 0.22);
+    color: #eafff2;
   }
-  /* Show 2 skills + the CTA pill */
-  #skills-container > :nth-child(n + 4):not(#book-call-pill) {
-    display: none;
+
+  /* Hide the old skills container on small screens (header replaces it). */
+  #skills-container {
+    display: none !important;
+  }
+
+  /* Keep the CTA sized to match chips */
+  #book-call-pill.cta-button--small {
+    font-size: 0.78rem;
+    padding: 7px 10px;
   }
 
   #hireme-rig .flag-text {
