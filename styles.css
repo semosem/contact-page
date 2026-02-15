@@ -2024,7 +2024,8 @@ body.is-idle .call-flash .call-fire {
 
   /* Keep skills visible but tidy on small screens: show 3 and center them. */
   #skills-container {
-    top: 60px;
+    /* Visually balanced top row */
+    top: 22px;
     left: var(--mobile-side);
     right: var(--mobile-side);
 
@@ -2032,15 +2033,30 @@ body.is-idle .call-flash .call-fire {
     width: calc(100% - (var(--mobile-side) * 2));
     max-width: 640px;
 
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    /* Reduce visual noise against the hero */
+    filter: saturate(0.95);
   }
 
-  /* Dot separator between skill pills (no literal bullet characters in text) */
+  /* On mobile, don't inject separators; spacing does the job. */
   #skills-container .skill-pill + .skill-pill::before {
-    content: "·";
-    margin-right: 8px;
-    color: rgba(0, 255, 106, 0.65);
-    text-shadow: 0 0 10px rgba(0, 255, 106, 0.25);
+    content: none;
+  }
+
+  /* Make the skill pills visually compatible with the CTA without changing CTA styling */
+  #skills-container .skill-pill {
+    padding: 7px 12px;
+    font-size: 0.7rem;
+    letter-spacing: 0.75px;
+
+    background: rgba(0, 255, 106, 0.14);
+    border-color: rgba(128, 255, 196, 0.75);
+    box-shadow:
+      0 0 8px rgba(0, 255, 136, 0.35),
+      0 0 14px rgba(0, 255, 106, 0.22);
   }
   /* Show 2 skills + the CTA pill */
   #skills-container > :nth-child(n + 4):not(#book-call-pill) {
