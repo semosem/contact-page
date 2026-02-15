@@ -2039,8 +2039,8 @@ body.is-idle .call-flash .call-fire {
     max-width: none;
     justify-content: center;
   }
-  /* Show 3 skills + the CTA pill */
-  #skills-container .skill-pill:nth-child(n + 5):not(#book-call-pill) {
+  /* Show 2 skills + the CTA pill */
+  #skills-container .skill-pill:nth-child(n + 4):not(#book-call-pill) {
     display: none;
   }
 
