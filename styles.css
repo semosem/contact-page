@@ -2231,9 +2231,27 @@ body.is-idle .call-flash .call-fire {
   }
   #slider-hud {
     font-size: 10px;
+    opacity: 0.98;
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 0 12px rgba(0, 255, 106, 0.22);
   }
+  #slider-hud .hud-line {
+    color: rgba(234, 255, 242, 0.98);
+  }
+  #slider-hud .hud-value {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 106, 0.28));
+  }
+
   .sale-indicator {
     font-size: 10px;
+    opacity: 0.98;
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 0 12px rgba(0, 255, 106, 0.22);
+  }
+  .sale-indicator p {
+    color: rgba(234, 255, 242, 0.98);
   }
   /* Remove the keyboard hint on mobile (touch UI). */
   #keyboard-hint {
