@@ -220,7 +220,14 @@ if (missing.length) {
 
   if (slider) slider.init();
   audio.init();
-  handleSliderChange(Number(dom.slider.value), false);
+
+  // Start at slider step index 1 (value 5) so the pitch is clearer immediately.
+  // Keeps the user in the "soft" band but not at the absolute minimum.
+  if (Number(dom.slider.value) === 0) {
+    slider.setValue(Math.min(tunedSettings.sliderMax, tunedSettings.sliderStep * 1));
+  } else {
+    handleSliderChange(Number(dom.slider.value), false);
+  }
 
   const loadEnhancements = async () => {
     const [{ createMatrixRain, startTitleGlitch }, { createGifLayer }] =

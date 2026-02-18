@@ -63,18 +63,8 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(0, 255, 106, 0) 24%,
-    rgba(0, 255, 106, 0.28) 50%,
-    rgba(0, 255, 106, 0) 76%
-  );
-  opacity: 0.65;
-  transform: translateX(-120%);
-  animation: pageSweep 3.2s ease-in-out infinite alternate;
-  pointer-events: none;
-  z-index: 2;
-  mix-blend-mode: screen;
+  /* Green sweep disabled — keep only the red sweep for now. */
+  display: none;
 }
 body::after {
   content: "";
@@ -789,6 +779,11 @@ html.fonts-ready #resume {
     0 0 36px rgba(0, 165, 255, 0.8);
 }
 /* === Performance Layer === */
+/* Temporarily hidden (reduce visual noise while we tighten the funnel). */
+#performance-layer {
+  display: none !important;
+}
+
 #performance-layer {
   position: fixed;
   left: 50%;
