@@ -13,12 +13,18 @@ export const SETTINGS = {
 export const MATRIX_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export const RESUME_CONTENT = [
+  "I build React/TypeScript products that ship fast and stay maintainable.",
+  "Need a hand on UI/performance or architecture? Book a 15‑min call.",
   "Let’s turn ideas into reliable software with clean and maintainable code.",
   "I specialize in building scalable frontend architectures and making full-stack apps easier to maintain.",
   "Reliable software, shipped fast. I help founders and small teams turn ideas into maintainable clean code, clear communication, no drama.",
   "Experience across construction tech, video marketing, and heavy machinery. Tools: Redux, GraphQL, Docker, Google Cloud, Azure.",
   "I can plug in premium interaction design without the performance heat",
   "Across React, TypeScript, JS, Vue, Node, and Angular",
+  "Reliable software, shipped fast. I help founders and small teams turn ideas into maintainable clean code.",
+  "Experience across construction tech, video marketing, and heavy machinery industries.",
+  "I can plug in premium interaction design to your software without causing performance heat",
+  "Strong React/TypeScript, with Vue, Node.js, and Angular experience.",
   "I hunt bugs fast and fix root causes, not just symptoms.",
   "Integrations + infra: GraphQL, Docker, GCP/Azure (when needed).",
   "Need a focused win? Feature Sprint (1 week) — scoped, shipped, handed off.",
