@@ -312,40 +312,51 @@ body.is-idle #glitch-grid.is-active::after {
 #offers {
   width: min(80vw, 640px);
   max-width: 70ch;
-  margin: 14px auto 0;
+  margin: 16px auto 18px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   position: relative;
   z-index: 3;
 }
 .offer {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 255, 120, 0.16);
-  background: rgba(0, 0, 0, 0.10);
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 255, 120, 0.18);
+  background: rgba(0, 0, 0, 0.14);
   text-decoration: none;
   color: #eafff2;
-  box-shadow: inset 0 0 0 1px rgba(0, 255, 120, 0.04);
+
+  /* Material-ish elevation: subtle, stable */
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(0, 255, 120, 0.04);
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    filter 120ms ease;
 }
 .offer:hover {
-  border-color: rgba(0, 255, 120, 0.30);
+  border-color: rgba(0, 255, 120, 0.34);
+  transform: translateY(-1px);
   box-shadow:
-    inset 0 0 0 1px rgba(0, 255, 120, 0.06),
-    0 0 18px rgba(0, 255, 120, 0.12);
+    0 6px 22px rgba(0, 0, 0, 0.22),
+    0 0 18px rgba(0, 255, 120, 0.10),
+    inset 0 0 0 1px rgba(0, 255, 120, 0.06);
 }
 .offer__title {
   font-weight: 900;
-  letter-spacing: 0.6px;
-  font-size: 0.92rem;
+  letter-spacing: 0.4px;
+  font-size: 0.95rem;
 }
 .offer__meta {
   opacity: 0.75;
-  font-size: 0.78rem;
-  letter-spacing: 0.4px;
+  font-size: 0.80rem;
+  letter-spacing: 0.35px;
 }
 
 @media (max-width: 720px) {
