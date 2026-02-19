@@ -7,6 +7,8 @@
   --scanline-opacity: 0.2;
   --matrix-opacity: 0.6;
   --slider-bottom: 15%;
+  /* Reserve space above the fixed slider so hero content never crowds it */
+  --slider-safe-gap: clamp(160px, 22vh, 240px);
   --shadow-green-soft: 0 0 10px rgba(0, 255, 106, 0.45);
   --shadow-green-mid: 0 0 12px rgba(0, 255, 106, 0.6);
   --shadow-hud:
@@ -295,6 +297,7 @@ body.is-idle #glitch-grid.is-active::after {
   justify-content: center;
   height: 100vh;
   padding: 24px;
+  padding-bottom: calc(24px + var(--slider-safe-gap));
   box-sizing: border-box;
   text-align: center;
 }
